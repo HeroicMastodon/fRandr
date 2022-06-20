@@ -25,8 +25,8 @@ class Display with _$Display {
 @freezed
 class Resolution with _$Resolution {
   const factory Resolution(
-    double width,
-    double height,
+    int width,
+    int height,
   ) = _Resolution;
 
   factory Resolution.fromJson(Map<String, dynamic> json) =>
@@ -36,8 +36,8 @@ class Resolution with _$Resolution {
 @freezed
 class DisplayOffset with _$DisplayOffset {
   const factory DisplayOffset(
-    double x,
-    double y,
+    int x,
+    int y,
   ) = _Offset;
 
   factory DisplayOffset.fromJson(Map<String, dynamic> json) =>

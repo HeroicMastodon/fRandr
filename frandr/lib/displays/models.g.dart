@@ -39,8 +39,8 @@ Map<String, dynamic> _$$_DisplayToJson(_$_Display instance) =>
 
 _$_Resolution _$$_ResolutionFromJson(Map<String, dynamic> json) =>
     _$_Resolution(
-      (json['width'] as num).toDouble(),
-      (json['height'] as num).toDouble(),
+      json['width'] as int,
+      json['height'] as int,
     );
 
 Map<String, dynamic> _$$_ResolutionToJson(_$_Resolution instance) =>
@@ -50,8 +50,8 @@ Map<String, dynamic> _$$_ResolutionToJson(_$_Resolution instance) =>
     };
 
 _$_Offset _$$_OffsetFromJson(Map<String, dynamic> json) => _$_Offset(
-      (json['x'] as num).toDouble(),
-      (json['y'] as num).toDouble(),
+      json['x'] as int,
+      json['y'] as int,
     );
 
 Map<String, dynamic> _$$_OffsetToJson(_$_Offset instance) => <String, dynamic>{

@@ -24,8 +24,8 @@ class DisplaysWidget extends HookWidget {
   Widget build(BuildContext context) {
     print(jsonEncode(state.displays.first.value));
     final displays = state.displays;
-    double width = state.maxWidth;
-    double height = state.maxHeight;
+    double width = state.maxWidth.toDouble();
+    double height = state.maxHeight.toDouble();
     final verticalScroll = useScrollController();
     final horizontalScroll = useScrollController();
     useEffect(() {
@@ -92,8 +92,8 @@ class DisplayWidget extends HookWidget {
     final display = useValueListenable(state.displays[index]);
     final ratio = useValueListenable(state.aspectRatio);
     return Positioned(
-      left: display.offset.x,
-      top: display.offset.y,
+      left: display.offset.x.toDouble(),
+      top: display.offset.y.toDouble(),
       child: Draggable(
         feedback: child(context, display, ratio),
         onDragEnd: (details) {

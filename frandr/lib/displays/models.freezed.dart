@@ -361,8 +361,8 @@ Resolution _$ResolutionFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Resolution {
-  double get width => throw _privateConstructorUsedError;
-  double get height => throw _privateConstructorUsedError;
+  int get width => throw _privateConstructorUsedError;
+  int get height => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -375,7 +375,7 @@ abstract class $ResolutionCopyWith<$Res> {
   factory $ResolutionCopyWith(
           Resolution value, $Res Function(Resolution) then) =
       _$ResolutionCopyWithImpl<$Res>;
-  $Res call({double width, double height});
+  $Res call({int width, int height});
 }
 
 /// @nodoc
@@ -395,11 +395,11 @@ class _$ResolutionCopyWithImpl<$Res> implements $ResolutionCopyWith<$Res> {
       width: width == freezed
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       height: height == freezed
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
     ));
   }
 }
@@ -411,7 +411,7 @@ abstract class _$$_ResolutionCopyWith<$Res>
           _$_Resolution value, $Res Function(_$_Resolution) then) =
       __$$_ResolutionCopyWithImpl<$Res>;
   @override
-  $Res call({double width, double height});
+  $Res call({int width, int height});
 }
 
 /// @nodoc
@@ -433,11 +433,11 @@ class __$$_ResolutionCopyWithImpl<$Res> extends _$ResolutionCopyWithImpl<$Res>
       width == freezed
           ? _value.width
           : width // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       height == freezed
           ? _value.height
           : height // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
     ));
   }
 }
@@ -451,9 +451,9 @@ class _$_Resolution implements _Resolution {
       _$$_ResolutionFromJson(json);
 
   @override
-  final double width;
+  final int width;
   @override
-  final double height;
+  final int height;
 
   @override
   String toString() {
@@ -488,16 +488,15 @@ class _$_Resolution implements _Resolution {
 }
 
 abstract class _Resolution implements Resolution {
-  const factory _Resolution(final double width, final double height) =
-      _$_Resolution;
+  const factory _Resolution(final int width, final int height) = _$_Resolution;
 
   factory _Resolution.fromJson(Map<String, dynamic> json) =
       _$_Resolution.fromJson;
 
   @override
-  double get width => throw _privateConstructorUsedError;
+  int get width => throw _privateConstructorUsedError;
   @override
-  double get height => throw _privateConstructorUsedError;
+  int get height => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_ResolutionCopyWith<_$_Resolution> get copyWith =>
@@ -510,8 +509,8 @@ DisplayOffset _$DisplayOffsetFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$DisplayOffset {
-  double get x => throw _privateConstructorUsedError;
-  double get y => throw _privateConstructorUsedError;
+  int get x => throw _privateConstructorUsedError;
+  int get y => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -524,7 +523,7 @@ abstract class $DisplayOffsetCopyWith<$Res> {
   factory $DisplayOffsetCopyWith(
           DisplayOffset value, $Res Function(DisplayOffset) then) =
       _$DisplayOffsetCopyWithImpl<$Res>;
-  $Res call({double x, double y});
+  $Res call({int x, int y});
 }
 
 /// @nodoc
@@ -545,11 +544,11 @@ class _$DisplayOffsetCopyWithImpl<$Res>
       x: x == freezed
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       y: y == freezed
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
     ));
   }
 }
@@ -560,7 +559,7 @@ abstract class _$$_OffsetCopyWith<$Res>
   factory _$$_OffsetCopyWith(_$_Offset value, $Res Function(_$_Offset) then) =
       __$$_OffsetCopyWithImpl<$Res>;
   @override
-  $Res call({double x, double y});
+  $Res call({int x, int y});
 }
 
 /// @nodoc
@@ -581,11 +580,11 @@ class __$$_OffsetCopyWithImpl<$Res> extends _$DisplayOffsetCopyWithImpl<$Res>
       x == freezed
           ? _value.x
           : x // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
       y == freezed
           ? _value.y
           : y // ignore: cast_nullable_to_non_nullable
-              as double,
+              as int,
     ));
   }
 }
@@ -599,9 +598,9 @@ class _$_Offset implements _Offset {
       _$$_OffsetFromJson(json);
 
   @override
-  final double x;
+  final int x;
   @override
-  final double y;
+  final int y;
 
   @override
   String toString() {
@@ -636,14 +635,14 @@ class _$_Offset implements _Offset {
 }
 
 abstract class _Offset implements DisplayOffset {
-  const factory _Offset(final double x, final double y) = _$_Offset;
+  const factory _Offset(final int x, final int y) = _$_Offset;
 
   factory _Offset.fromJson(Map<String, dynamic> json) = _$_Offset.fromJson;
 
   @override
-  double get x => throw _privateConstructorUsedError;
+  int get x => throw _privateConstructorUsedError;
   @override
-  double get y => throw _privateConstructorUsedError;
+  int get y => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_OffsetCopyWith<_$_Offset> get copyWith =>

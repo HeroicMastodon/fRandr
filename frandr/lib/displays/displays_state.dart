@@ -29,8 +29,8 @@ class DisplaysState {
       final x = offset.x;
       final y = offset.y;
       display.value = display.value.copyWith.offset(
-        x: x * aspectRatio.value / value,
-        y: y * aspectRatio.value / value,
+        x: x * aspectRatio.value ~/ value,
+        y: y * aspectRatio.value ~/ value,
       );
     }
     aspectRatio.value = value;
@@ -42,19 +42,19 @@ class DisplaysState {
     final offsetY = draggableDetails.offset.dy - kToolbarHeight +
         verticalScrollOffset;
 
-    final double x =
+    final x =
     _calculateXForDisplayArea(offsetX, displayState.value, index);
-    final double y =
+    final y =
     _calculateYForDisplayArea(offsetY, displayState.value, index);
-    final clampedX = clamp(x, 0, maxWidth);
-    final clampedY = clamp(y, 0, maxHeight);
+    final clampedX = clamp(x, 0, maxWidth).toInt();
+    final clampedY = clamp(y, 0, maxHeight).toInt();
 
     displayState.value = displayState.value.copyWith(
       offset: DisplayOffset(clampedX, clampedY),
     );
   }
 
-  double clamp(double val, double low, double high) {
+  num clamp(num val, num low, num high) {
     return val < low
         ? low
         : val > high
@@ -62,12 +62,12 @@ class DisplaysState {
         : val;
   }
 
-  double _calculateXForDisplayArea(double x,
+  int _calculateXForDisplayArea(double x,
       Display display,
       int index,) {
     if (x < 0) return 0;
 
-    var width = display.resolution.width / aspectRatio.value;
+    var width = display.resolution.width ~/ aspectRatio.value;
     if (x + width > maxWidth) {
       return maxWidth - width;
     }
@@ -75,7 +75,7 @@ class DisplaysState {
     final leftMeetsRight = _getLeftMeetsRightNeighbor(x, index, display);
     if (leftMeetsRight != null) {
       return leftMeetsRight.offset.x +
-          leftMeetsRight.resolution.width / aspectRatio.value;
+          leftMeetsRight.resolution.width ~/ aspectRatio.value;
     }
 
     final leftMeetsLeft = _getLeftMeetsLeftNeighbor(x, index, display);
@@ -86,25 +86,25 @@ class DisplaysState {
     final rightMeetsLeft = _getRightMeetsLeftNeighbor(x, index, display);
     if (rightMeetsLeft != null) {
       return rightMeetsLeft.offset.x -
-          display.resolution.width / aspectRatio.value;
+          display.resolution.width ~/ aspectRatio.value;
     }
 
     final rightMeetsRight = _getRightMeetsRightNeighbor(x, index, display);
     if (rightMeetsRight != null) {
       return rightMeetsRight.offset.x -
-          display.resolution.width / aspectRatio.value +
-          rightMeetsRight.resolution.width / aspectRatio.value;
+          display.resolution.width ~/ aspectRatio.value +
+          rightMeetsRight.resolution.width ~/ aspectRatio.value;
     }
 
-    return x;
+    return x.toInt();
   }
 
-  double _calculateYForDisplayArea(double y,
+  int _calculateYForDisplayArea(double y,
       Display display,
       int index,) {
     if (y < 0) return 0;
 
-    var height = display.resolution.height / aspectRatio.value;
+    var height = display.resolution.height ~/ aspectRatio.value;
     if (y + height > maxHeight) {
       return maxHeight - height;
     }
@@ -117,23 +117,23 @@ class DisplaysState {
     final bottomMeetsTop = _getBottomMeetsTopNeighbor(y, index, display);
     if (bottomMeetsTop != null) {
       return (bottomMeetsTop.offset.y -
-          display.resolution.height / aspectRatio.value);
+          display.resolution.height ~/ aspectRatio.value);
     }
 
     final bottomMeetsBottom = _getBottomMeetsBottomNeighbor(y, index, display);
     if (bottomMeetsBottom != null) {
       return bottomMeetsBottom.offset.y -
-          display.resolution.height / aspectRatio.value +
-          bottomMeetsBottom.resolution.height / aspectRatio.value;
+          display.resolution.height ~/ aspectRatio.value +
+          bottomMeetsBottom.resolution.height ~/ aspectRatio.value;
     }
 
     final topMeetsBottom = _getTopMeetsBottomNeighbor(y, index, display);
     if (topMeetsBottom != null) {
       return topMeetsBottom.offset.y +
-          topMeetsBottom.resolution.height / aspectRatio.value;
+          topMeetsBottom.resolution.height ~/ aspectRatio.value;
     }
 
-    return y;
+    return y.toInt();
   }
 
   // get the neighbor whose right edge meets the display's left edge
@@ -143,7 +143,7 @@ class DisplaysState {
     final index = displays.indexWhere((el) {
       if (el.value == display) return false;
 
-      final width = el.value.resolution.width / aspectRatio.value;
+      final width = el.value.resolution.width ~/ aspectRatio.value;
       final rightEdge = el.value.offset.x + width;
       return isInRange(x, rightEdge);
     });
@@ -174,7 +174,7 @@ class DisplaysState {
       if (el.value == display) return false;
 
       final rightEdge =
-          el.value.offset.x + el.value.resolution.width / aspectRatio.value;
+          el.value.offset.x + el.value.resolution.width ~/ aspectRatio.value;
       return isInRange(displayRightEdge, rightEdge);
     });
 
@@ -232,7 +232,7 @@ class DisplaysState {
       if (el.value == display) return false;
 
       final bottomEdge =
-          el.value.offset.y + el.value.resolution.height / aspectRatio.value;
+          el.value.offset.y + el.value.resolution.height ~/ aspectRatio.value;
       return isInRange(
           y + display.resolution.height / aspectRatio.value, bottomEdge);
     });
@@ -247,25 +247,25 @@ class DisplaysState {
       if (el.value == display) return false;
 
       final bottomEdge =
-          el.value.offset.y + el.value.resolution.height / aspectRatio.value;
+          el.value.offset.y + el.value.resolution.height ~/ aspectRatio.value;
       return isInRange(y, bottomEdge);
     });
 
     return index < 0 ? null : displays[index].value;
   }
 
-  bool isInRange(double offset, double edge) =>
+  bool isInRange(double offset, int edge) =>
       offset < edge + wiggleRoom.value && offset > edge - wiggleRoom.value;
 
-  double get maxWidth =>
+  int get maxWidth =>
       displays.fold(
-          0.0,
+          0,
               (previousValue, element) =>
-          previousValue + element.value.resolution.width / aspectRatio.value);
+          previousValue + element.value.resolution.width ~/ aspectRatio.value);
 
-  double get maxHeight =>
+  int get maxHeight =>
       displays.fold(
-          0.0,
+          0,
               (previousValue, element) =>
-          previousValue + element.value.resolution.height / aspectRatio.value);
+          previousValue + element.value.resolution.height ~/ aspectRatio.value);
 }
