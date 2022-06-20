@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:frandr/displays/displays_state.dart';
@@ -13,28 +11,29 @@ class DisplaysWidget extends HookWidget {
   final state = GetIt.instance.get<DisplaysState>();
 
   verticalScrollListener(ScrollController controller) => () {
-    state.verticalScrollOffset = controller.offset;
-  };
+        state.verticalScrollOffset = controller.offset;
+      };
 
   horizontalScrollListener(ScrollController controller) => () {
-    state.horizontalScrollOffset = controller.offset;
-  };
+        state.horizontalScrollOffset = controller.offset;
+      };
 
   @override
   Widget build(BuildContext context) {
-    print(jsonEncode(state.displays.first.value));
     final displays = state.displays;
     double width = state.maxWidth.toDouble();
     double height = state.maxHeight.toDouble();
     final verticalScroll = useScrollController();
     final horizontalScroll = useScrollController();
+    useValueListenable(state.aspectRatio);
     useEffect(() {
       verticalScroll.addListener(verticalScrollListener(verticalScroll));
       horizontalScroll.addListener(horizontalScrollListener(horizontalScroll));
 
       return () {
         verticalScroll.removeListener(verticalScrollListener(verticalScroll));
-        horizontalScroll.removeListener(horizontalScrollListener(horizontalScroll));
+        horizontalScroll
+            .removeListener(horizontalScrollListener(horizontalScroll));
       };
     });
 
@@ -95,7 +94,7 @@ class DisplayWidget extends HookWidget {
       left: display.offset.x.toDouble(),
       top: display.offset.y.toDouble(),
       child: Draggable(
-        feedback: child(context, display, ratio),
+        feedback: Material(child: child(context, display, ratio)),
         onDragEnd: (details) {
           state.updateDisplayCoordinates(details, index);
         },
@@ -114,6 +113,19 @@ class DisplayWidget extends HookWidget {
         border: Border.all(
           color: Colors.blue,
           width: 2,
+        ),
+      ),
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(display.name ?? display.outputName ?? "unknown"),
+            Text("Offset:${display.offset.x * ratio}x${display.offset.y * ratio}"),
+            Text(
+                "Resolution:${display.resolution.width}x${display.resolution.height}"),
+          ],
         ),
       ),
     );
