@@ -121,6 +121,13 @@ class App extends HookWidget {
                   icon: const Icon(Icons.save),
                 ),
               ),
+              const Tooltip(
+                message: "Apply current configuration",
+                child: IconButton(
+                  onPressed: null,
+                  icon: const Icon(Icons.check_circle_outline),
+                ),
+              )
             ],
           ),
         ),
