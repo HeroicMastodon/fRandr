@@ -23,6 +23,14 @@ class DisplaysState {
   double verticalScrollOffset = 0;
   double horizontalScrollOffset = 0;
 
+  void changeDisplayName(int index, String name){}
+  void changeDisplayIsPrimary(int index, bool isPrimary) {}
+  void changeDisplayIsActive(int index, bool isActive) {}
+  void changeDisplayOrientation(int index, DisplayOrientation orientation) {}
+  void changeDisplayRefresh(int index, double refreshRate){}
+  void changeDisplayResolution(int index, Resolution resolution) {}
+  void changeDisplayOffset(int index, DisplayOffset offset){}
+
   void updateAspectRatio(int value) {
     for (var display in displays) {
       final offset = display.value.offset;

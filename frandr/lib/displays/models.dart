@@ -15,7 +15,7 @@ class Display with _$Display {
     @Default(false) bool primary,
     @Default(false) bool connected,
     @Default(60) double refreshRate,
-    @Default(Orientation.normal()) Orientation orientation,
+    @Default(DisplayOrientation.normal()) DisplayOrientation orientation,
   }) = _Display;
 
   factory Display.fromJson(Map<String, dynamic> json) =>
@@ -45,15 +45,15 @@ class DisplayOffset with _$DisplayOffset {
 }
 
 @freezed
-class Orientation with _$Orientation {
-  const factory Orientation.normal() = NormalOrientation;
+class DisplayOrientation with _$DisplayOrientation {
+  const factory DisplayOrientation.normal() = NormalOrientation;
 
-  const factory Orientation.right() = TurnedRight;
+  const factory DisplayOrientation.right() = TurnedRight;
 
-  const factory Orientation.inverted() = InvertedOrientation;
+  const factory DisplayOrientation.inverted() = InvertedOrientation;
 
-  const factory Orientation.left() = TurnedLeft;
+  const factory DisplayOrientation.left() = TurnedLeft;
 
-  factory Orientation.fromJson(Map<String, dynamic> json) =>
+  factory DisplayOrientation.fromJson(Map<String, dynamic> json) =>
       _$OrientationFromJson(json);
 }

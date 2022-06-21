@@ -4,6 +4,7 @@ import 'package:frandr/displays/displays_widget.dart';
 import 'package:get_it/get_it.dart';
 
 import 'displays/displays_state.dart';
+import 'displays/outputs_modal/outputs_modal.dart';
 
 class App extends HookWidget {
   App({super.key});
@@ -13,36 +14,18 @@ class App extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: ThemeData.dark().copyWith(toggleableActiveColor: Colors.blue),
+      theme: ThemeData.dark().copyWith(
+        toggleableActiveColor: Colors.blue,
+        checkboxTheme: CheckboxThemeData(
+          shape: CircleBorder()
+        ),
+      ),
       home: Scaffold(
         backgroundColor: const Color.fromRGBO(29, 29, 29, 1.0),
         appBar: AppBar(
           title: Row(
             children: [
-              PopupMenuButton<int>(
-                onSelected: (value) {
-                  print("open display at index: $value");
-                },
-                tooltip: "Edit output options",
-                child: Container(
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(4))),
-                  padding: const EdgeInsets.all(8),
-                  child: const Text("Outputs"),
-                ),
-                itemBuilder: (context) {
-                  final items = <PopupMenuItem<int>>[];
-                  state.displays.asMap().forEach((index, display) {
-                    items.add(
-                      PopupMenuItem(
-                        value: index,
-                        child: Text(display.value.name ?? "unknown"),
-                      ),
-                    );
-                  });
-                  return items;
-                },
-              ),
+              OutputPopupButton(state: state),
               const SizedBox(
                 width: 8,
               ),
@@ -108,6 +91,45 @@ class App extends HookWidget {
         ),
         body: DisplaysWidget(),
       ),
+    );
+  }
+}
+
+class OutputPopupButton extends StatelessWidget {
+  const OutputPopupButton({
+    Key? key,
+    required this.state,
+  }) : super(key: key);
+
+  final DisplaysState state;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopupMenuButton<int>(
+      onSelected: (value) async {
+        print("open display at index: $value");
+        await showOutputsModal(context, value);
+      },
+      tooltip: "Edit output options",
+      child: Container(
+        decoration: const BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(4)),
+        ),
+        padding: const EdgeInsets.all(8),
+        child: const Text("Outputs"),
+      ),
+      itemBuilder: (context) {
+        final items = <PopupMenuItem<int>>[];
+        state.displays.asMap().forEach((index, display) {
+          items.add(
+            PopupMenuItem(
+              value: index,
+              child: Text(display.value.name ?? "unknown"),
+            ),
+          );
+        });
+        return items;
+      },
     );
   }
 }

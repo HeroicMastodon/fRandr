@@ -20,8 +20,8 @@ _$_Display _$$_DisplayFromJson(Map<String, dynamic> json) => _$_Display(
       connected: json['connected'] as bool? ?? false,
       refreshRate: (json['refreshRate'] as num?)?.toDouble() ?? 60,
       orientation: json['orientation'] == null
-          ? const Orientation.normal()
-          : Orientation.fromJson(json['orientation'] as Map<String, dynamic>),
+          ? const DisplayOrientation.normal()
+          : DisplayOrientation.fromJson(json['orientation'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_DisplayToJson(_$_Display instance) =>

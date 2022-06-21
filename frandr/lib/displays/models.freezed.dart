@@ -28,7 +28,7 @@ mixin _$Display {
   bool get primary => throw _privateConstructorUsedError;
   bool get connected => throw _privateConstructorUsedError;
   double get refreshRate => throw _privateConstructorUsedError;
-  Orientation get orientation => throw _privateConstructorUsedError;
+  DisplayOrientation get orientation => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,7 +48,7 @@ abstract class $DisplayCopyWith<$Res> {
       bool primary,
       bool connected,
       double refreshRate,
-      Orientation orientation});
+      DisplayOrientation orientation});
 
   $ResolutionCopyWith<$Res> get resolution;
   $DisplayOffsetCopyWith<$Res> get offset;
@@ -111,7 +111,7 @@ class _$DisplayCopyWithImpl<$Res> implements $DisplayCopyWith<$Res> {
       orientation: orientation == freezed
           ? _value.orientation
           : orientation // ignore: cast_nullable_to_non_nullable
-              as Orientation,
+              as DisplayOrientation,
     ));
   }
 
@@ -152,7 +152,7 @@ abstract class _$$_DisplayCopyWith<$Res> implements $DisplayCopyWith<$Res> {
       bool primary,
       bool connected,
       double refreshRate,
-      Orientation orientation});
+      DisplayOrientation orientation});
 
   @override
   $ResolutionCopyWith<$Res> get resolution;
@@ -219,7 +219,7 @@ class __$$_DisplayCopyWithImpl<$Res> extends _$DisplayCopyWithImpl<$Res>
       orientation: orientation == freezed
           ? _value.orientation
           : orientation // ignore: cast_nullable_to_non_nullable
-              as Orientation,
+              as DisplayOrientation,
     ));
   }
 }
@@ -236,7 +236,7 @@ class _$_Display implements _Display {
       this.primary = false,
       this.connected = false,
       this.refreshRate = 60,
-      this.orientation = const Orientation.normal()});
+      this.orientation = const DisplayOrientation.normal()});
 
   factory _$_Display.fromJson(Map<String, dynamic> json) =>
       _$$_DisplayFromJson(json);
@@ -265,7 +265,7 @@ class _$_Display implements _Display {
   final double refreshRate;
   @override
   @JsonKey()
-  final Orientation orientation;
+  final DisplayOrientation orientation;
 
   @override
   String toString() {
@@ -327,7 +327,7 @@ abstract class _Display implements Display {
       final bool primary,
       final bool connected,
       final double refreshRate,
-      final Orientation orientation}) = _$_Display;
+      final DisplayOrientation orientation}) = _$_Display;
 
   factory _Display.fromJson(Map<String, dynamic> json) = _$_Display.fromJson;
 
@@ -348,7 +348,7 @@ abstract class _Display implements Display {
   @override
   double get refreshRate => throw _privateConstructorUsedError;
   @override
-  Orientation get orientation => throw _privateConstructorUsedError;
+  DisplayOrientation get orientation => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_DisplayCopyWith<_$_Display> get copyWith =>
@@ -649,7 +649,7 @@ abstract class _Offset implements DisplayOffset {
       throw _privateConstructorUsedError;
 }
 
-Orientation _$OrientationFromJson(Map<String, dynamic> json) {
+DisplayOrientation _$OrientationFromJson(Map<String, dynamic> json) {
   switch (json['runtimeType']) {
     case 'normal':
       return NormalOrientation.fromJson(json);
@@ -667,7 +667,7 @@ Orientation _$OrientationFromJson(Map<String, dynamic> json) {
 }
 
 /// @nodoc
-mixin _$Orientation {
+mixin _$DisplayOrientation {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() normal,
@@ -724,7 +724,7 @@ mixin _$Orientation {
 /// @nodoc
 abstract class $OrientationCopyWith<$Res> {
   factory $OrientationCopyWith(
-          Orientation value, $Res Function(Orientation) then) =
+          DisplayOrientation value, $Res Function(DisplayOrientation) then) =
       _$OrientationCopyWithImpl<$Res>;
 }
 
@@ -732,9 +732,9 @@ abstract class $OrientationCopyWith<$Res> {
 class _$OrientationCopyWithImpl<$Res> implements $OrientationCopyWith<$Res> {
   _$OrientationCopyWithImpl(this._value, this._then);
 
-  final Orientation _value;
+  final DisplayOrientation _value;
   // ignore: unused_field
-  final $Res Function(Orientation) _then;
+  final $Res Function(DisplayOrientation) _then;
 }
 
 /// @nodoc
@@ -862,7 +862,7 @@ class _$NormalOrientation implements NormalOrientation {
   }
 }
 
-abstract class NormalOrientation implements Orientation {
+abstract class NormalOrientation implements DisplayOrientation {
   const factory NormalOrientation() = _$NormalOrientation;
 
   factory NormalOrientation.fromJson(Map<String, dynamic> json) =
@@ -993,7 +993,7 @@ class _$TurnedRight implements TurnedRight {
   }
 }
 
-abstract class TurnedRight implements Orientation {
+abstract class TurnedRight implements DisplayOrientation {
   const factory TurnedRight() = _$TurnedRight;
 
   factory TurnedRight.fromJson(Map<String, dynamic> json) =
@@ -1126,7 +1126,7 @@ class _$InvertedOrientation implements InvertedOrientation {
   }
 }
 
-abstract class InvertedOrientation implements Orientation {
+abstract class InvertedOrientation implements DisplayOrientation {
   const factory InvertedOrientation() = _$InvertedOrientation;
 
   factory InvertedOrientation.fromJson(Map<String, dynamic> json) =
@@ -1257,7 +1257,7 @@ class _$TurnedLeft implements TurnedLeft {
   }
 }
 
-abstract class TurnedLeft implements Orientation {
+abstract class TurnedLeft implements DisplayOrientation {
   const factory TurnedLeft() = _$TurnedLeft;
 
   factory TurnedLeft.fromJson(Map<String, dynamic> json) =
