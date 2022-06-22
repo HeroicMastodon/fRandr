@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:frandr/displays/displays_state.dart';
+import 'package:frandr/displays/outputs_modal/outputs_modal.dart';
 import 'package:get_it/get_it.dart';
 
 import 'models.dart';
@@ -90,16 +91,33 @@ class DisplayWidget extends HookWidget {
   Widget build(BuildContext context) {
     final display = useValueListenable(state.displays[index]);
     final ratio = useValueListenable(state.aspectRatio);
+    final isDragged = useState(false);
+
     return Positioned(
       left: display.offset.x.toDouble(),
       top: display.offset.y.toDouble(),
-      child: Draggable(
-        feedback: Material(child: child(context, display, ratio)),
-        onDragEnd: (details) {
-          state.updateDisplayCoordinates(details, index);
-        },
-        childWhenDragging: const SizedBox.shrink(),
-        child: child(context, display, ratio),
+      child: MouseRegion(
+        cursor: SystemMouseCursors.grab,
+        child: GestureDetector(
+          onSecondaryTap: () async => await showOutputsModal(context, index),
+          child: Draggable(
+            onDragStarted: () {
+              isDragged.value = true;
+            },
+            feedback: Material(
+              child: MouseRegion(
+                cursor: SystemMouseCursors.move,
+                child: child(context, display, ratio),
+              ),
+            ),
+            onDragEnd: (details) {
+              state.updateDisplayCoordinates(details, index);
+              isDragged.value = false;
+            },
+            childWhenDragging: const SizedBox.shrink(),
+            child: child(context, display, ratio),
+          ),
+        ),
       ),
     );
   }
@@ -121,10 +139,18 @@ class DisplayWidget extends HookWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(display.name ?? display.outputName ?? "unknown"),
-            Text("Offset:${display.offset.x * ratio}x${display.offset.y * ratio}"),
             Text(
-                "Resolution:${display.resolution.width}x${display.resolution.height}"),
+              display.name ?? display.outputName ?? "unknown",
+              overflow: TextOverflow.fade,
+            ),
+            Text(
+              "Offset:${display.offset.x * ratio}x${display.offset.y * ratio}",
+              overflow: TextOverflow.fade,
+            ),
+            Text(
+              "Resolution:${display.resolution.width}x${display.resolution.height}",
+              overflow: TextOverflow.fade,
+            ),
           ],
         ),
       ),

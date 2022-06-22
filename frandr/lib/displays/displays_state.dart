@@ -23,13 +23,64 @@ class DisplaysState {
   double verticalScrollOffset = 0;
   double horizontalScrollOffset = 0;
 
-  void changeDisplayName(int index, String name){}
-  void changeDisplayIsPrimary(int index, bool isPrimary) {}
-  void changeDisplayIsActive(int index, bool isActive) {}
-  void changeDisplayOrientation(int index, DisplayOrientation orientation) {}
-  void changeDisplayRefresh(int index, double refreshRate){}
-  void changeDisplayResolution(int index, Resolution resolution) {}
-  void changeDisplayOffset(int index, DisplayOffset offset){}
+  void changeDisplayName(int index, String name) {
+    final display = displays[index];
+    display.value = display.value.copyWith(name: name);
+  }
+
+  void changeDisplayIsPrimary(int index, bool isPrimary) {
+    print(isPrimary);
+    if (isPrimary) {
+      for (int i = 0; i < displays.length; i++) {
+        final state = displays[i];
+        final display = state.value;
+        print(display);
+        state.value = display.copyWith(primary: display.active && i == index);
+        print(state.value);
+      }
+
+      return;
+    }
+
+    final state = displays[index];
+    final display = state.value;
+    state.value = display.copyWith(primary: false);
+
+    final newPrimary = displays.firstWhere((e) => e.value.active);
+    newPrimary.value = newPrimary.value.copyWith(primary: true);
+  }
+
+  void changeDisplayIsActive(int index, bool isActive) {
+    final state = displays[index];
+    if (isActive && !state.value.connected) return;
+
+    state.value = state.value.copyWith(active: isActive);
+
+    if (!isActive && displays.every((e) => !e.value.active)) {
+      final newActive = displays.firstWhere((e) => e.value.connected);
+      newActive.value = newActive.value.copyWith(active: true);
+    }
+  }
+
+  void changeDisplayOrientation(int index, DisplayOrientation orientation) {
+    final display = displays[index];
+    display.value = display.value.copyWith(orientation: orientation);
+  }
+
+  void changeDisplayRefresh(int index, double refreshRate) {
+    final display = displays[index];
+    display.value = display.value.copyWith(refreshRate: refreshRate);
+  }
+
+  void changeDisplayResolution(int index, Resolution resolution) {
+    final display = displays[index];
+    display.value = display.value.copyWith(resolution: resolution);
+  }
+
+  void changeDisplayOffset(int index, DisplayOffset offset) {
+    final display = displays[index];
+    display.value = display.value.copyWith(offset: offset);
+  }
 
   void updateAspectRatio(int value) {
     for (var display in displays) {
@@ -47,13 +98,11 @@ class DisplaysState {
   void updateDisplayCoordinates(DraggableDetails draggableDetails, int index) {
     final displayState = displays.elementAt(index);
     var offsetX = draggableDetails.offset.dx + horizontalScrollOffset;
-    final offsetY = draggableDetails.offset.dy - kToolbarHeight +
-        verticalScrollOffset;
+    final offsetY =
+        draggableDetails.offset.dy - kToolbarHeight + verticalScrollOffset;
 
-    final x =
-    _calculateXForDisplayArea(offsetX, displayState.value, index);
-    final y =
-    _calculateYForDisplayArea(offsetY, displayState.value, index);
+    final x = _calculateXForDisplayArea(offsetX, displayState.value, index);
+    final y = _calculateYForDisplayArea(offsetY, displayState.value, index);
     final clampedX = clamp(x, 0, maxWidth).toInt();
     final clampedY = clamp(y, 0, maxHeight).toInt();
 
@@ -66,13 +115,15 @@ class DisplaysState {
     return val < low
         ? low
         : val > high
-        ? high
-        : val;
+            ? high
+            : val;
   }
 
-  int _calculateXForDisplayArea(double x,
-      Display display,
-      int index,) {
+  int _calculateXForDisplayArea(
+    double x,
+    Display display,
+    int index,
+  ) {
     if (x < 0) return 0;
 
     var width = display.resolution.width ~/ aspectRatio.value;
@@ -107,9 +158,11 @@ class DisplaysState {
     return x.toInt();
   }
 
-  int _calculateYForDisplayArea(double y,
-      Display display,
-      int index,) {
+  int _calculateYForDisplayArea(
+    double y,
+    Display display,
+    int index,
+  ) {
     if (y < 0) return 0;
 
     var height = display.resolution.height ~/ aspectRatio.value;
@@ -145,9 +198,11 @@ class DisplaysState {
   }
 
   // get the neighbor whose right edge meets the display's left edge
-  Display? _getLeftMeetsRightNeighbor(double x,
-      int index,
-      Display display,) {
+  Display? _getLeftMeetsRightNeighbor(
+    double x,
+    int index,
+    Display display,
+  ) {
     final index = displays.indexWhere((el) {
       if (el.value == display) return false;
 
@@ -160,9 +215,11 @@ class DisplaysState {
   }
 
   // get the neighbor whose left edge meets the display's left edge
-  Display? _getLeftMeetsLeftNeighbor(double x,
-      int index,
-      Display display,) {
+  Display? _getLeftMeetsLeftNeighbor(
+    double x,
+    int index,
+    Display display,
+  ) {
     final index = displays.indexWhere((el) {
       if (el.value == display) return false;
 
@@ -174,9 +231,11 @@ class DisplaysState {
   }
 
   // get the neighbor whose right edge meets the display's right edge
-  Display? _getRightMeetsRightNeighbor(double x,
-      int index,
-      Display display,) {
+  Display? _getRightMeetsRightNeighbor(
+    double x,
+    int index,
+    Display display,
+  ) {
     final displayRightEdge = x + display.resolution.width / aspectRatio.value;
     final index = displays.indexWhere((el) {
       if (el.value == display) return false;
@@ -190,9 +249,11 @@ class DisplaysState {
   }
 
   // get the neighbor whose left edge meets the display's right edge
-  Display? _getRightMeetsLeftNeighbor(double x,
-      int index,
-      Display display,) {
+  Display? _getRightMeetsLeftNeighbor(
+    double x,
+    int index,
+    Display display,
+  ) {
     final index = displays.indexWhere((el) {
       if (el.value == display) return false;
 
@@ -206,9 +267,11 @@ class DisplaysState {
     return index < 0 ? null : displays[index].value;
   }
 
-  Display? _getTopMeetsTopNeighbor(double y,
-      int index,
-      Display display,) {
+  Display? _getTopMeetsTopNeighbor(
+    double y,
+    int index,
+    Display display,
+  ) {
     final index = displays.indexWhere((el) {
       if (el.value == display) return false;
 
@@ -219,9 +282,11 @@ class DisplaysState {
     return index < 0 ? null : displays[index].value;
   }
 
-  Display? _getBottomMeetsTopNeighbor(double y,
-      int index,
-      Display display,) {
+  Display? _getBottomMeetsTopNeighbor(
+    double y,
+    int index,
+    Display display,
+  ) {
     final index = displays.indexWhere((el) {
       if (el.value == display) return false;
 
@@ -233,9 +298,11 @@ class DisplaysState {
     return index < 0 ? null : displays[index].value;
   }
 
-  Display? _getBottomMeetsBottomNeighbor(double y,
-      int index,
-      Display display,) {
+  Display? _getBottomMeetsBottomNeighbor(
+    double y,
+    int index,
+    Display display,
+  ) {
     final index = displays.indexWhere((el) {
       if (el.value == display) return false;
 
@@ -248,9 +315,11 @@ class DisplaysState {
     return index < 0 ? null : displays[index].value;
   }
 
-  Display? _getTopMeetsBottomNeighbor(double y,
-      int index,
-      Display display,) {
+  Display? _getTopMeetsBottomNeighbor(
+    double y,
+    int index,
+    Display display,
+  ) {
     final index = displays.indexWhere((el) {
       if (el.value == display) return false;
 
@@ -265,15 +334,13 @@ class DisplaysState {
   bool isInRange(double offset, int edge) =>
       offset < edge + wiggleRoom.value && offset > edge - wiggleRoom.value;
 
-  int get maxWidth =>
-      displays.fold(
-          0,
-              (previousValue, element) =>
+  int get maxWidth => displays.fold(
+      0,
+      (previousValue, element) =>
           previousValue + element.value.resolution.width ~/ aspectRatio.value);
 
-  int get maxHeight =>
-      displays.fold(
-          0,
-              (previousValue, element) =>
+  int get maxHeight => displays.fold(
+      0,
+      (previousValue, element) =>
           previousValue + element.value.resolution.height ~/ aspectRatio.value);
 }

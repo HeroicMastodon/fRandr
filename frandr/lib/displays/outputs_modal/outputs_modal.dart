@@ -24,7 +24,21 @@ class OutputsModal extends HookWidget {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
+            Row(
+              children: [
+                const Text(
+                  'Output Config',
+                  style: TextStyle(fontSize: 24),
+                ),
+                const Spacer(),
+                IconButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  icon: const Icon(Icons.close),
+                ),
+              ],
+            ),
             Row(
               children: [
                 Expanded(
@@ -102,6 +116,8 @@ class OutputsModal extends HookWidget {
                         width: 104,
                         child: TextFormField(
                           onChanged: (value) {
+                            if (value.isEmpty) return;
+
                             final numberVal = double.parse(value);
                             state.changeDisplayRefresh(displayIndex, numberVal);
                           },
@@ -131,7 +147,13 @@ class OutputsModal extends HookWidget {
                   child: TextFormField(
                     decoration: const InputDecoration(labelText: 'Width'),
                     initialValue: display.resolution.width.toString(),
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      if (value.isEmpty) return;
+
+                      final resolution =
+                          display.resolution.copyWith(width: int.parse(value));
+                      state.changeDisplayResolution(displayIndex, resolution);
+                    },
                     inputFormatters: numberFormatters,
                   ),
                 ),
@@ -144,7 +166,13 @@ class OutputsModal extends HookWidget {
                   child: TextFormField(
                     decoration: const InputDecoration(labelText: 'Height'),
                     initialValue: display.resolution.height.toString(),
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      if (value.isEmpty) return;
+
+                      final resolution =
+                          display.resolution.copyWith(height: int.parse(value));
+                      state.changeDisplayResolution(displayIndex, resolution);
+                    },
                     inputFormatters: numberFormatters,
                   ),
                 ),
@@ -161,7 +189,13 @@ class OutputsModal extends HookWidget {
                   child: TextFormField(
                     decoration: const InputDecoration(labelText: 'horizontal'),
                     initialValue: display.offset.x.toString(),
-                    onChanged: (value) {},
+                    onChanged: (value) {
+                      if (value.isEmpty) return;
+
+                      final offset =
+                          display.offset.copyWith(x: int.parse(value));
+                      state.changeDisplayOffset(displayIndex, offset);
+                    },
                     inputFormatters: numberFormatters,
                   ),
                 ),
@@ -173,8 +207,14 @@ class OutputsModal extends HookWidget {
                   width: 96,
                   child: TextFormField(
                     decoration: const InputDecoration(labelText: 'vertical'),
-                    initialValue: display.offset.x.toString(),
-                    onChanged: (value) {},
+                    initialValue: display.offset.y.toString(),
+                    onChanged: (value) {
+                      if (value.isEmpty) return;
+
+                      final offset =
+                          display.offset.copyWith(y: int.parse(value));
+                      state.changeDisplayOffset(displayIndex, offset);
+                    },
                     inputFormatters: numberFormatters,
                   ),
                 ),
