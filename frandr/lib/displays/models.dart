@@ -55,5 +55,29 @@ class DisplayOrientation with _$DisplayOrientation {
   const factory DisplayOrientation.left() = TurnedLeft;
 
   factory DisplayOrientation.fromJson(Map<String, dynamic> json) =>
-      _$OrientationFromJson(json);
+      _$DisplayOrientationFromJson(json);
+}
+
+@freezed
+class Configuration with _$Configuration {
+  const factory Configuration({
+    @Default('') String setup,
+    @Default({}) Map<String, Setup> setups,
+    String? name,
+}) = _Configuration;
+
+  factory Configuration.fromJson(Map<String, dynamic> json) =>
+      _$ConfigurationFromJson(json);
+}
+
+@freezed
+class Setup with _$Setup {
+  const factory Setup({
+    required String id,
+    @Default('name') String name,
+    @Default([]) List<Display> displays,
+    @Default('') String command,
+}) = _Setup;
+
+  factory Setup.fromJson(Map<String, dynamic> json) => _$SetupFromJson(json);
 }

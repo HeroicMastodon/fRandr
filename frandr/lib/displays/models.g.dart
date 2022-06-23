@@ -21,7 +21,8 @@ _$_Display _$$_DisplayFromJson(Map<String, dynamic> json) => _$_Display(
       refreshRate: (json['refreshRate'] as num?)?.toDouble() ?? 60,
       orientation: json['orientation'] == null
           ? const DisplayOrientation.normal()
-          : DisplayOrientation.fromJson(json['orientation'] as Map<String, dynamic>),
+          : DisplayOrientation.fromJson(
+              json['orientation'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$_DisplayToJson(_$_Display instance) =>
@@ -98,4 +99,38 @@ _$TurnedLeft _$$TurnedLeftFromJson(Map<String, dynamic> json) => _$TurnedLeft(
 Map<String, dynamic> _$$TurnedLeftToJson(_$TurnedLeft instance) =>
     <String, dynamic>{
       'runtimeType': instance.$type,
+    };
+
+_$_Configuration _$$_ConfigurationFromJson(Map<String, dynamic> json) =>
+    _$_Configuration(
+      setup: json['setup'] as String? ?? '',
+      setups: (json['setups'] as Map<String, dynamic>?)?.map(
+            (k, e) => MapEntry(k, Setup.fromJson(e as Map<String, dynamic>)),
+          ) ??
+          const {},
+      name: json['name'] as String?,
+    );
+
+Map<String, dynamic> _$$_ConfigurationToJson(_$_Configuration instance) =>
+    <String, dynamic>{
+      'setup': instance.setup,
+      'setups': instance.setups,
+      'name': instance.name,
+    };
+
+_$_Setup _$$_SetupFromJson(Map<String, dynamic> json) => _$_Setup(
+      id: json['id'] as String,
+      name: json['name'] as String? ?? 'name',
+      displays: (json['displays'] as List<dynamic>?)
+              ?.map((e) => Display.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          const [],
+      command: json['command'] as String? ?? '',
+    );
+
+Map<String, dynamic> _$$_SetupToJson(_$_Setup instance) => <String, dynamic>{
+      'id': instance.id,
+      'name': instance.name,
+      'displays': instance.displays,
+      'command': instance.command,
     };

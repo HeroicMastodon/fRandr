@@ -22,6 +22,8 @@ class DisplaysState {
   final wiggleRoom = ValueNotifier(25);
   double verticalScrollOffset = 0;
   double horizontalScrollOffset = 0;
+  final configurations = ValueNotifier<Map<String, ValueNotifier<Configuration>>>({});
+  final configurationDirectory = ValueNotifier('');
 
   void changeDisplayName(int index, String name) {
     final display = displays[index];
@@ -29,14 +31,11 @@ class DisplaysState {
   }
 
   void changeDisplayIsPrimary(int index, bool isPrimary) {
-    print(isPrimary);
     if (isPrimary) {
       for (int i = 0; i < displays.length; i++) {
         final state = displays[i];
         final display = state.value;
-        print(display);
         state.value = display.copyWith(primary: display.active && i == index);
-        print(state.value);
       }
 
       return;
