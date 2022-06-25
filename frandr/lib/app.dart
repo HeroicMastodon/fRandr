@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:frandr/displays/configuration_modal/confguration_modal.dart';
+import 'package:frandr/displays/configuration_repository/configuration_repository.dart';
 import 'package:frandr/displays/displays_widget.dart';
 import 'package:get_it/get_it.dart';
 
@@ -65,7 +66,7 @@ class App extends HookWidget {
                 child: IconButton(
                   splashRadius: 24,
                   onPressed: () {
-                    print("save configuration");
+                    state.saveConfigurations();
                   },
                   icon: const Icon(Icons.save),
                 ),
@@ -143,8 +144,9 @@ class OutputPopupButton extends StatelessWidget {
         state.displays.value.asMap().forEach((index, display) {
           items.add(
             PopupMenuItem(
+              enabled: display.value.connected,
               value: index,
-              child: Text(display.value.name ?? "unknown"),
+              child: Text(display.value.name ?? display.value.outputName ?? "unknown"),
             ),
           );
         });

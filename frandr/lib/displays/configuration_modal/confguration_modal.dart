@@ -27,7 +27,7 @@ class ConfigurationModal extends HookWidget {
                       labelText: 'Configuration Directory',
                     ),
                     initialValue: configDir,
-                    onChanged: (value) {},
+                    onChanged: (value) => state.changeConfigurationDirectory(value),
                   ),
                 ),
               ],

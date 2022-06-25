@@ -32,15 +32,15 @@ class ConfigurationHelper {
             !element.startsWith('\n'))
         .toList();
 
-    final displaySplit = displayLines.map((e) => e.split(' ')).where((e) => e.isNotEmpty);
+    final displaySplit = displayLines.map((e) => e.split(' ')).where((e) => e.length > 1);
 
     final displayMap = <String, bool>{};
     for (var display in displaySplit) {
-      print(display);
       displayMap[display[0]] = display[1] == 'connected';
     }
 
     print(displayMap);
+
 
     return displayMap;
   }

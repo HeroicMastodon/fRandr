@@ -29,7 +29,7 @@ class DisplaysState {
         .map((key, value) => MapEntry(key, ValueNotifier(value)));
     currentSetupHash.value =
         await ConfigurationHelper.generateCurrentConfigurationHash();
-    selectConfiguration();
+    await selectConfiguration();
 
     return this;
   }
@@ -46,7 +46,7 @@ class DisplaysState {
     config.value = config.value.copyWith(setups: setups);
   }
 
-  void selectConfiguration() {
+  Future<void> selectConfiguration() async {
     if (currentSetupHash.value.isEmpty) return;
 
     var configuration = configurations.value[currentSetupHash.value]?.value;
@@ -55,8 +55,18 @@ class DisplaysState {
       final setup = configuration.setups[selectedSetupId.value ?? ''];
 
       if (setup == null) {
-        displays.value = [];
+        displays.value = await mapConnectedDisplays();
         aspectRatio.value = 8;
+        final setupId = uuid();
+        configuration = configuration.copyWith(setups: {
+          ...configuration.setups,
+          setupId: Setup(
+            id: setupId,
+            aspectRatio: aspectRatio.value,
+            displays: displays.value.map((e) => e.value).toList(),
+          ),
+        });
+        selectedSetupId.value = setupId;
       } else {
         displays.value = setup.displays.map((e) => ValueNotifier(e)).toList();
         aspectRatio.value = setup.aspectRatio;
@@ -66,7 +76,7 @@ class DisplaysState {
       configurations.value[currentSetupHash.value] =
           ValueNotifier(configuration);
       selectedSetupId.value = configuration.selectedSetupId;
-      displays.value = [];
+      displays.value = await mapConnectedDisplays();
       aspectRatio.value = 8;
     }
   }
@@ -75,6 +85,24 @@ class DisplaysState {
     final display = displays.value[index];
     display.value = display.value.copyWith(name: name);
     syncConfigWithDisplays();
+  }
+
+  Future<List<ValueNotifier<Display>>> mapConnectedDisplays() async {
+    final connectedDisplays = await ConfigurationHelper.getConnectedDisplays();
+
+    return connectedDisplays
+        .map(
+          (key, value) => MapEntry(
+            key,
+            ValueNotifier(Display(
+              outputName: key,
+              connected: value,
+              active: true,
+            )),
+          ),
+        )
+        .values
+        .toList();
   }
 
   void changeDisplayIsPrimary(int index, bool isPrimary) {
@@ -169,6 +197,7 @@ class DisplaysState {
 
   void changeConfigurationDirectory(String value) {
     configDirectory.value = value;
+    ConfigurationRepository.configurationDirectory = value;
   }
 
   void saveConfigurations() async {
