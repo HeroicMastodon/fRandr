@@ -1,13 +1,30 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../models.dart';
 
 class ConfigurationRepository {
+  static final _sharedPrefs = GetIt.instance.get<SharedPreferences>();
+  static const _configDirKey = 'configuration_directory';
+
+  static set configurationDirectory(String value) =>
+      _sharedPrefs.setString(_configDirKey, value);
+
+  static String get configurationDirectory =>
+      _sharedPrefs.getString(_configDirKey) ?? '';
+
   static Future<Map<String, Configuration>> loadConfigurations(
     String configDir,
   ) async {
     final file = File(configDir);
+
+    if (!(await file.exists())) {
+      return {};
+    }
+
     final Map<String, dynamic> json = jsonDecode(await file.readAsString());
     final configs =
         json.map((key, value) => MapEntry(key, Configuration.fromJson(value)));
@@ -25,16 +42,4 @@ class ConfigurationRepository {
   }
 }
 
-class ConfigurationHelper {
-  static Future<String> generateCurrentConfigurationHash() async {
-    final result = await Process.run(
-      'sh',
-      [
-        '-c',
-        'edid_hash=""; for DEVICE in /sys/class/drm/card*-*; do [ -e "\${DEVICE}/status" ] && grep -q "^connected\$" "\${DEVICE}/status" || continue; edid_hash="\${edid_hash}"\$(md5sum "\${DEVICE}/edid" | awk \'{print \$1}\'); done; echo \$(echo "\$edid_hash" | md5sum | awk \'{print \$1}\');',
-      ],
-    );
-    final hash = result.stdout.toString().trim();
-    return hash;
-  }
-}
+

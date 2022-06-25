@@ -1,16 +1,17 @@
 {
   "default": {
     "setup": "xrandr --output DP-0 --off --output DP-1 --off --output HDMI-0 --off --output DP-2 --off --output eDP-1-0 --mode 2560x1440 --pos 0x0 --rotate normal",
-    "monitors": [
-      ""
-    ]
+    "setups": {},
+    "name": null
   },
   "aebb396c298d0b8251c994c9461c8076": {
     "setup": "xrandr --output DP-0 --off --output DP-1 --off --output HDMI-0 --off --output DP-2 --off --output eDP-1-0 --mode 2560x1440 --pos 0x0 --rotate normal",
-    "monitors": []
+    "setups": {},
+    "name": "Laptop Only"
   },
   "eb7a09cb9ccafca8c3c42e3ef8aabc8b": {
     "setup": "xrandr --output eDP-1-0 --off --output DP-0 --rate 144.00 --mode 3440x1440",
-    "monitors": []
+    "setups": {},
+    "name": null
   }
 }

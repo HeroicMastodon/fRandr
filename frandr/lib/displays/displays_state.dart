@@ -1,88 +1,143 @@
 import 'package:flutter/material.dart';
+import 'package:frandr/displays/configuration_repository/configuration_repository.dart';
 
+import 'configuration_repository/configuration_helper.dart';
 import 'models.dart';
 
 class DisplaysState {
-  final displays = <ValueNotifier<Display>>[
-    ValueNotifier(const Display(
-      resolution: Resolution(3440, 1440),
-      offset: DisplayOffset(0, 0),
-    )),
-    ValueNotifier(const Display(
-      resolution: Resolution(2560, 1440),
-      offset: DisplayOffset(0, 0),
-    )),
-    ValueNotifier(const Display(
-      resolution: Resolution(1440, 2560),
-      offset: DisplayOffset(0, 0),
-    )),
-  ];
+  final displays = ValueNotifier(<ValueNotifier<Display>>[]);
   final aspectRatio = ValueNotifier(8);
   final configDirectory = ValueNotifier("");
   final wiggleRoom = ValueNotifier(25);
   double verticalScrollOffset = 0;
   double horizontalScrollOffset = 0;
-  final configurations = ValueNotifier<Map<String, ValueNotifier<Configuration>>>({});
-  final configurationDirectory = ValueNotifier('');
+  final configurations =
+      ValueNotifier<Map<String, ValueNotifier<Configuration>>>({});
+  final currentSetupHash = ValueNotifier('');
+  final selectedSetupId = ValueNotifier<String?>(null);
+
+  Future<bool> get selectedHashMatchesActualHast async =>
+      selectedSetupId.value ==
+      await ConfigurationHelper.generateCurrentConfigurationHash();
+
+  // TODO: load configuration and keep defaults if not found. Update UI to reflect missing configurations. Also add an ADD configuration button.
+
+  Future<DisplaysState> initialize() async {
+    configDirectory.value = ConfigurationRepository.configurationDirectory;
+    configurations.value = (await ConfigurationRepository.loadConfigurations(
+            configDirectory.value))
+        .map((key, value) => MapEntry(key, ValueNotifier(value)));
+    currentSetupHash.value =
+        await ConfigurationHelper.generateCurrentConfigurationHash();
+    selectConfiguration();
+
+    return this;
+  }
+
+  void syncConfigWithDisplays() {
+    final config = configurations.value[currentSetupHash];
+    if (config == null) return;
+    final setups = config.value.setups;
+    final setup = setups[selectedSetupId]?.copyWith(
+      displays: displays.value.map((e) => e.value).toList(),
+      aspectRatio: aspectRatio.value,
+    );
+    setups[selectedSetupId.value ?? ''] = setup ?? Setup(id: uuid());
+    config.value = config.value.copyWith(setups: setups);
+  }
+
+  void selectConfiguration() {
+    if (currentSetupHash.value.isEmpty) return;
+
+    var configuration = configurations.value[currentSetupHash.value]?.value;
+    if (configuration != null) {
+      selectedSetupId.value = configuration.selectedSetupId;
+      final setup = configuration.setups[selectedSetupId.value ?? ''];
+
+      if (setup == null) {
+        displays.value = [];
+        aspectRatio.value = 8;
+      } else {
+        displays.value = setup.displays.map((e) => ValueNotifier(e)).toList();
+        aspectRatio.value = setup.aspectRatio;
+      }
+    } else {
+      configuration = const Configuration();
+      configurations.value[currentSetupHash.value] =
+          ValueNotifier(configuration);
+      selectedSetupId.value = configuration.selectedSetupId;
+      displays.value = [];
+      aspectRatio.value = 8;
+    }
+  }
 
   void changeDisplayName(int index, String name) {
-    final display = displays[index];
+    final display = displays.value[index];
     display.value = display.value.copyWith(name: name);
+    syncConfigWithDisplays();
   }
 
   void changeDisplayIsPrimary(int index, bool isPrimary) {
     if (isPrimary) {
-      for (int i = 0; i < displays.length; i++) {
-        final state = displays[i];
+      for (int i = 0; i < displays.value.length; i++) {
+        final state = displays.value[i];
         final display = state.value;
         state.value = display.copyWith(primary: display.active && i == index);
       }
 
+      syncConfigWithDisplays();
       return;
     }
 
-    final state = displays[index];
+    final state = displays.value[index];
     final display = state.value;
     state.value = display.copyWith(primary: false);
 
-    final newPrimary = displays.firstWhere((e) => e.value.active);
+    final newPrimary = displays.value.firstWhere((e) => e.value.active);
     newPrimary.value = newPrimary.value.copyWith(primary: true);
+    syncConfigWithDisplays();
   }
 
   void changeDisplayIsActive(int index, bool isActive) {
-    final state = displays[index];
+    final state = displays.value[index];
     if (isActive && !state.value.connected) return;
 
     state.value = state.value.copyWith(active: isActive);
 
-    if (!isActive && displays.every((e) => !e.value.active)) {
-      final newActive = displays.firstWhere((e) => e.value.connected);
+    if (!isActive && displays.value.every((e) => !e.value.active)) {
+      final newActive = displays.value.firstWhere((e) => e.value.connected);
       newActive.value = newActive.value.copyWith(active: true);
     }
+
+    syncConfigWithDisplays();
   }
 
   void changeDisplayOrientation(int index, DisplayOrientation orientation) {
-    final display = displays[index];
+    final display = displays.value[index];
     display.value = display.value.copyWith(orientation: orientation);
+    syncConfigWithDisplays();
   }
 
   void changeDisplayRefresh(int index, double refreshRate) {
-    final display = displays[index];
+    final display = displays.value[index];
     display.value = display.value.copyWith(refreshRate: refreshRate);
+    syncConfigWithDisplays();
   }
 
   void changeDisplayResolution(int index, Resolution resolution) {
-    final display = displays[index];
+    final display = displays.value[index];
     display.value = display.value.copyWith(resolution: resolution);
+    syncConfigWithDisplays();
   }
 
   void changeDisplayOffset(int index, DisplayOffset offset) {
-    final display = displays[index];
+    final display = displays.value[index];
     display.value = display.value.copyWith(offset: offset);
+    syncConfigWithDisplays();
   }
 
   void updateAspectRatio(int value) {
-    for (var display in displays) {
+    for (var display in displays.value) {
       final offset = display.value.offset;
       final x = offset.x;
       final y = offset.y;
@@ -92,10 +147,11 @@ class DisplaysState {
       );
     }
     aspectRatio.value = value;
+    syncConfigWithDisplays();
   }
 
   void updateDisplayCoordinates(DraggableDetails draggableDetails, int index) {
-    final displayState = displays.elementAt(index);
+    final displayState = displays.value.elementAt(index);
     var offsetX = draggableDetails.offset.dx + horizontalScrollOffset;
     final offsetY =
         draggableDetails.offset.dy - kToolbarHeight + verticalScrollOffset;
@@ -107,6 +163,18 @@ class DisplaysState {
 
     displayState.value = displayState.value.copyWith(
       offset: DisplayOffset(clampedX, clampedY),
+    );
+    syncConfigWithDisplays();
+  }
+
+  void changeConfigurationDirectory(String value) {
+    configDirectory.value = value;
+  }
+
+  void saveConfigurations() async {
+    await ConfigurationRepository.saveConfigurations(
+      configurations.value.map((key, value) => MapEntry(key, value.value)),
+      configDirectory.value,
     );
   }
 
@@ -202,7 +270,7 @@ class DisplaysState {
     int index,
     Display display,
   ) {
-    final index = displays.indexWhere((el) {
+    final index = displays.value.indexWhere((el) {
       if (el.value == display) return false;
 
       final width = el.value.resolution.width ~/ aspectRatio.value;
@@ -210,7 +278,7 @@ class DisplaysState {
       return isInRange(x, rightEdge);
     });
 
-    return index < 0 ? null : displays[index].value;
+    return index < 0 ? null : displays.value[index].value;
   }
 
   // get the neighbor whose left edge meets the display's left edge
@@ -219,14 +287,14 @@ class DisplaysState {
     int index,
     Display display,
   ) {
-    final index = displays.indexWhere((el) {
+    final index = displays.value.indexWhere((el) {
       if (el.value == display) return false;
 
       final leftEdge = el.value.offset.x;
       return isInRange(x, leftEdge);
     });
 
-    return index < 0 ? null : displays[index].value;
+    return index < 0 ? null : displays.value[index].value;
   }
 
   // get the neighbor whose right edge meets the display's right edge
@@ -236,7 +304,7 @@ class DisplaysState {
     Display display,
   ) {
     final displayRightEdge = x + display.resolution.width / aspectRatio.value;
-    final index = displays.indexWhere((el) {
+    final index = displays.value.indexWhere((el) {
       if (el.value == display) return false;
 
       final rightEdge =
@@ -244,7 +312,7 @@ class DisplaysState {
       return isInRange(displayRightEdge, rightEdge);
     });
 
-    return index < 0 ? null : displays[index].value;
+    return index < 0 ? null : displays.value[index].value;
   }
 
   // get the neighbor whose left edge meets the display's right edge
@@ -253,7 +321,7 @@ class DisplaysState {
     int index,
     Display display,
   ) {
-    final index = displays.indexWhere((el) {
+    final index = displays.value.indexWhere((el) {
       if (el.value == display) return false;
 
       final leftEdge = el.value.offset.x;
@@ -263,7 +331,7 @@ class DisplaysState {
       );
     });
 
-    return index < 0 ? null : displays[index].value;
+    return index < 0 ? null : displays.value[index].value;
   }
 
   Display? _getTopMeetsTopNeighbor(
@@ -271,14 +339,14 @@ class DisplaysState {
     int index,
     Display display,
   ) {
-    final index = displays.indexWhere((el) {
+    final index = displays.value.indexWhere((el) {
       if (el.value == display) return false;
 
       final topEdge = el.value.offset.y;
       return isInRange(y, topEdge);
     });
 
-    return index < 0 ? null : displays[index].value;
+    return index < 0 ? null : displays.value[index].value;
   }
 
   Display? _getBottomMeetsTopNeighbor(
@@ -286,7 +354,7 @@ class DisplaysState {
     int index,
     Display display,
   ) {
-    final index = displays.indexWhere((el) {
+    final index = displays.value.indexWhere((el) {
       if (el.value == display) return false;
 
       final topEdge = el.value.offset.y;
@@ -294,7 +362,7 @@ class DisplaysState {
           y + display.resolution.height / aspectRatio.value, topEdge);
     });
 
-    return index < 0 ? null : displays[index].value;
+    return index < 0 ? null : displays.value[index].value;
   }
 
   Display? _getBottomMeetsBottomNeighbor(
@@ -302,7 +370,7 @@ class DisplaysState {
     int index,
     Display display,
   ) {
-    final index = displays.indexWhere((el) {
+    final index = displays.value.indexWhere((el) {
       if (el.value == display) return false;
 
       final bottomEdge =
@@ -311,7 +379,7 @@ class DisplaysState {
           y + display.resolution.height / aspectRatio.value, bottomEdge);
     });
 
-    return index < 0 ? null : displays[index].value;
+    return index < 0 ? null : displays.value[index].value;
   }
 
   Display? _getTopMeetsBottomNeighbor(
@@ -319,7 +387,7 @@ class DisplaysState {
     int index,
     Display display,
   ) {
-    final index = displays.indexWhere((el) {
+    final index = displays.value.indexWhere((el) {
       if (el.value == display) return false;
 
       final bottomEdge =
@@ -327,18 +395,18 @@ class DisplaysState {
       return isInRange(y, bottomEdge);
     });
 
-    return index < 0 ? null : displays[index].value;
+    return index < 0 ? null : displays.value[index].value;
   }
 
   bool isInRange(double offset, int edge) =>
       offset < edge + wiggleRoom.value && offset > edge - wiggleRoom.value;
 
-  int get maxWidth => displays.fold(
+  int get maxWidth => displays.value.fold(
       0,
       (previousValue, element) =>
           previousValue + element.value.resolution.width ~/ aspectRatio.value);
 
-  int get maxHeight => displays.fold(
+  int get maxHeight => displays.value.fold(
       0,
       (previousValue, element) =>
           previousValue + element.value.resolution.height ~/ aspectRatio.value);

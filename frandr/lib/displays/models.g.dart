@@ -108,6 +108,7 @@ _$_Configuration _$$_ConfigurationFromJson(Map<String, dynamic> json) =>
             (k, e) => MapEntry(k, Setup.fromJson(e as Map<String, dynamic>)),
           ) ??
           const {},
+      selectedSetupId: json['selectedSetupId'] as String?,
       name: json['name'] as String?,
     );
 
@@ -115,6 +116,7 @@ Map<String, dynamic> _$$_ConfigurationToJson(_$_Configuration instance) =>
     <String, dynamic>{
       'setup': instance.setup,
       'setups': instance.setups,
+      'selectedSetupId': instance.selectedSetupId,
       'name': instance.name,
     };
 
@@ -126,6 +128,7 @@ _$_Setup _$$_SetupFromJson(Map<String, dynamic> json) => _$_Setup(
               .toList() ??
           const [],
       command: json['command'] as String? ?? '',
+      aspectRatio: json['aspectRatio'] as int? ?? 8,
     );
 
 Map<String, dynamic> _$$_SetupToJson(_$_Setup instance) => <String, dynamic>{
@@ -133,4 +136,5 @@ Map<String, dynamic> _$$_SetupToJson(_$_Setup instance) => <String, dynamic>{
       'name': instance.name,
       'displays': instance.displays,
       'command': instance.command,
+      'aspectRatio': instance.aspectRatio,
     };

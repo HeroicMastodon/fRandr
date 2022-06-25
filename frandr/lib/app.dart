@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:frandr/displays/configuration_modal/confguration_modal.dart';
 import 'package:frandr/displays/displays_widget.dart';
 import 'package:get_it/get_it.dart';
 
@@ -58,16 +59,7 @@ class App extends HookWidget {
                   ];
                 },
               ),
-              Tooltip(
-                message: "Edit Configuration",
-                child: IconButton(
-                  splashRadius: 24,
-                  onPressed: () {
-                    print("edit configuration");
-                  },
-                  icon: const Icon(Icons.settings),
-                ),
-              ),
+              const ConfigurationButton(),
               Tooltip(
                 message: "Save Configuration",
                 child: IconButton(
@@ -85,11 +77,39 @@ class App extends HookWidget {
                   onPressed: null,
                   icon: Icon(Icons.check_circle_outline),
                 ),
+              ),
+              Tooltip(
+                message: "Load configuration",
+                child: IconButton(
+                  splashRadius: 24,
+                  onPressed: () => state.initialize(),
+                  icon: const Icon(Icons.sync),
+                ),
               )
             ],
           ),
         ),
         body: DisplaysWidget(),
+      ),
+    );
+  }
+}
+
+class ConfigurationButton extends StatelessWidget {
+  const ConfigurationButton({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: "Edit Configuration",
+      child: IconButton(
+        splashRadius: 24,
+        onPressed: () async {
+          await showConfigurationModal(context);
+        },
+        icon: const Icon(Icons.settings),
       ),
     );
   }
@@ -120,7 +140,7 @@ class OutputPopupButton extends StatelessWidget {
       ),
       itemBuilder: (context) {
         final items = <PopupMenuItem<int>>[];
-        state.displays.asMap().forEach((index, display) {
+        state.displays.value.asMap().forEach((index, display) {
           items.add(
             PopupMenuItem(
               value: index,

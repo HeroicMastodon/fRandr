@@ -21,7 +21,7 @@ class DisplaysWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final displays = state.displays;
+    final displays = useValueListenable(state.displays);
     double width = state.maxWidth.toDouble();
     double height = state.maxHeight.toDouble();
     final verticalScroll = useScrollController();
@@ -89,7 +89,7 @@ class DisplayWidget extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final display = useValueListenable(state.displays[index]);
+    final display = useValueListenable(state.displays.value[index]);
     final ratio = useValueListenable(state.aspectRatio);
     final isDragged = useState(false);
 

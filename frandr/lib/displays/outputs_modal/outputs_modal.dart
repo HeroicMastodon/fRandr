@@ -16,7 +16,7 @@ class OutputsModal extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    final display = useValueListenable(state.displays[displayIndex]);
+    final display = useValueListenable(state.displays.value[displayIndex]);
     var numberFormatters = [
       FilteringTextInputFormatter.allow(RegExp(r'[0-9]'))
     ];

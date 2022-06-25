@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'models.freezed.dart';
@@ -63,8 +64,9 @@ class Configuration with _$Configuration {
   const factory Configuration({
     @Default('') String setup,
     @Default({}) Map<String, Setup> setups,
+    String? selectedSetupId,
     String? name,
-}) = _Configuration;
+  }) = _Configuration;
 
   factory Configuration.fromJson(Map<String, dynamic> json) =>
       _$ConfigurationFromJson(json);
@@ -77,7 +79,50 @@ class Setup with _$Setup {
     @Default('name') String name,
     @Default([]) List<Display> displays,
     @Default('') String command,
-}) = _Setup;
+    @Default(8) int aspectRatio,
+  }) = _Setup;
 
   factory Setup.fromJson(Map<String, dynamic> json) => _$SetupFromJson(json);
+}
+
+String setupToCommandString(Setup setup) {
+  var displaysString = setup.displays.map((e) {
+    if (!e.connected) {
+      return '';
+    }
+
+    var displayString = '--output ${e.outputName}';
+
+    if (!e.active) {
+      return '$displayString --off';
+    }
+
+    if (e.primary) displayString = '$displayString --primary';
+
+    displayString =
+        '$displayString --rate ${e.refreshRate.round()}.00 ${resolutionToMode(e.resolution)} ${offsetToPos(e.offset)} ${displayOrientationToRotate(e.orientation)}';
+
+    return displayString;
+  }).join(' ');
+
+  return 'xrandr $displaysString';
+}
+
+String resolutionToMode(Resolution resolution) {
+  return '--mode ${resolution.width}x${resolution.height}';
+}
+
+String offsetToPos(DisplayOffset offset) {
+  return '--pos ${offset.x}x${offset.y}';
+}
+
+String displayOrientationToRotate(DisplayOrientation orientation) {
+  final val = orientation.when(
+    normal: () => 'normal',
+    right: () => 'right',
+    inverted: () => 'inverted',
+    left: () => 'left',
+  );
+
+  return '--rotate $val';
 }

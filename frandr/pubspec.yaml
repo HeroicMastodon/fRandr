@@ -38,6 +38,7 @@ dependencies:
   flutter_hooks: ^0.18.5
   get_it: ^7.2.0
   shared_preferences: ^2.0.15
+  uuid: ^3.0.6
 
 dev_dependencies:
   flutter_test:

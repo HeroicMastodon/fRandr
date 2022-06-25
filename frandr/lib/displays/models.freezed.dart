@@ -1275,6 +1275,7 @@ Configuration _$ConfigurationFromJson(Map<String, dynamic> json) {
 mixin _$Configuration {
   String get setup => throw _privateConstructorUsedError;
   Map<String, Setup> get setups => throw _privateConstructorUsedError;
+  String? get selectedSetupId => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -1288,7 +1289,11 @@ abstract class $ConfigurationCopyWith<$Res> {
   factory $ConfigurationCopyWith(
           Configuration value, $Res Function(Configuration) then) =
       _$ConfigurationCopyWithImpl<$Res>;
-  $Res call({String setup, Map<String, Setup> setups, String? name});
+  $Res call(
+      {String setup,
+      Map<String, Setup> setups,
+      String? selectedSetupId,
+      String? name});
 }
 
 /// @nodoc
@@ -1304,6 +1309,7 @@ class _$ConfigurationCopyWithImpl<$Res>
   $Res call({
     Object? setup = freezed,
     Object? setups = freezed,
+    Object? selectedSetupId = freezed,
     Object? name = freezed,
   }) {
     return _then(_value.copyWith(
@@ -1315,6 +1321,10 @@ class _$ConfigurationCopyWithImpl<$Res>
           ? _value.setups
           : setups // ignore: cast_nullable_to_non_nullable
               as Map<String, Setup>,
+      selectedSetupId: selectedSetupId == freezed
+          ? _value.selectedSetupId
+          : selectedSetupId // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -1330,7 +1340,11 @@ abstract class _$$_ConfigurationCopyWith<$Res>
           _$_Configuration value, $Res Function(_$_Configuration) then) =
       __$$_ConfigurationCopyWithImpl<$Res>;
   @override
-  $Res call({String setup, Map<String, Setup> setups, String? name});
+  $Res call(
+      {String setup,
+      Map<String, Setup> setups,
+      String? selectedSetupId,
+      String? name});
 }
 
 /// @nodoc
@@ -1348,6 +1362,7 @@ class __$$_ConfigurationCopyWithImpl<$Res>
   $Res call({
     Object? setup = freezed,
     Object? setups = freezed,
+    Object? selectedSetupId = freezed,
     Object? name = freezed,
   }) {
     return _then(_$_Configuration(
@@ -1359,6 +1374,10 @@ class __$$_ConfigurationCopyWithImpl<$Res>
           ? _value._setups
           : setups // ignore: cast_nullable_to_non_nullable
               as Map<String, Setup>,
+      selectedSetupId: selectedSetupId == freezed
+          ? _value.selectedSetupId
+          : selectedSetupId // ignore: cast_nullable_to_non_nullable
+              as String?,
       name: name == freezed
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
@@ -1371,7 +1390,10 @@ class __$$_ConfigurationCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_Configuration implements _Configuration {
   const _$_Configuration(
-      {this.setup = '', final Map<String, Setup> setups = const {}, this.name})
+      {this.setup = '',
+      final Map<String, Setup> setups = const {},
+      this.selectedSetupId,
+      this.name})
       : _setups = setups;
 
   factory _$_Configuration.fromJson(Map<String, dynamic> json) =>
@@ -1389,11 +1411,13 @@ class _$_Configuration implements _Configuration {
   }
 
   @override
+  final String? selectedSetupId;
+  @override
   final String? name;
 
   @override
   String toString() {
-    return 'Configuration(setup: $setup, setups: $setups, name: $name)';
+    return 'Configuration(setup: $setup, setups: $setups, selectedSetupId: $selectedSetupId, name: $name)';
   }
 
   @override
@@ -1403,6 +1427,8 @@ class _$_Configuration implements _Configuration {
             other is _$_Configuration &&
             const DeepCollectionEquality().equals(other.setup, setup) &&
             const DeepCollectionEquality().equals(other._setups, _setups) &&
+            const DeepCollectionEquality()
+                .equals(other.selectedSetupId, selectedSetupId) &&
             const DeepCollectionEquality().equals(other.name, name));
   }
 
@@ -1412,6 +1438,7 @@ class _$_Configuration implements _Configuration {
       runtimeType,
       const DeepCollectionEquality().hash(setup),
       const DeepCollectionEquality().hash(_setups),
+      const DeepCollectionEquality().hash(selectedSetupId),
       const DeepCollectionEquality().hash(name));
 
   @JsonKey(ignore: true)
@@ -1429,6 +1456,7 @@ abstract class _Configuration implements Configuration {
   const factory _Configuration(
       {final String setup,
       final Map<String, Setup> setups,
+      final String? selectedSetupId,
       final String? name}) = _$_Configuration;
 
   factory _Configuration.fromJson(Map<String, dynamic> json) =
@@ -1438,6 +1466,8 @@ abstract class _Configuration implements Configuration {
   String get setup => throw _privateConstructorUsedError;
   @override
   Map<String, Setup> get setups => throw _privateConstructorUsedError;
+  @override
+  String? get selectedSetupId => throw _privateConstructorUsedError;
   @override
   String? get name => throw _privateConstructorUsedError;
   @override
@@ -1456,6 +1486,7 @@ mixin _$Setup {
   String get name => throw _privateConstructorUsedError;
   List<Display> get displays => throw _privateConstructorUsedError;
   String get command => throw _privateConstructorUsedError;
+  int get aspectRatio => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1466,7 +1497,12 @@ mixin _$Setup {
 abstract class $SetupCopyWith<$Res> {
   factory $SetupCopyWith(Setup value, $Res Function(Setup) then) =
       _$SetupCopyWithImpl<$Res>;
-  $Res call({String id, String name, List<Display> displays, String command});
+  $Res call(
+      {String id,
+      String name,
+      List<Display> displays,
+      String command,
+      int aspectRatio});
 }
 
 /// @nodoc
@@ -1483,6 +1519,7 @@ class _$SetupCopyWithImpl<$Res> implements $SetupCopyWith<$Res> {
     Object? name = freezed,
     Object? displays = freezed,
     Object? command = freezed,
+    Object? aspectRatio = freezed,
   }) {
     return _then(_value.copyWith(
       id: id == freezed
@@ -1501,6 +1538,10 @@ class _$SetupCopyWithImpl<$Res> implements $SetupCopyWith<$Res> {
           ? _value.command
           : command // ignore: cast_nullable_to_non_nullable
               as String,
+      aspectRatio: aspectRatio == freezed
+          ? _value.aspectRatio
+          : aspectRatio // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -1510,7 +1551,12 @@ abstract class _$$_SetupCopyWith<$Res> implements $SetupCopyWith<$Res> {
   factory _$$_SetupCopyWith(_$_Setup value, $Res Function(_$_Setup) then) =
       __$$_SetupCopyWithImpl<$Res>;
   @override
-  $Res call({String id, String name, List<Display> displays, String command});
+  $Res call(
+      {String id,
+      String name,
+      List<Display> displays,
+      String command,
+      int aspectRatio});
 }
 
 /// @nodoc
@@ -1528,6 +1574,7 @@ class __$$_SetupCopyWithImpl<$Res> extends _$SetupCopyWithImpl<$Res>
     Object? name = freezed,
     Object? displays = freezed,
     Object? command = freezed,
+    Object? aspectRatio = freezed,
   }) {
     return _then(_$_Setup(
       id: id == freezed
@@ -1546,6 +1593,10 @@ class __$$_SetupCopyWithImpl<$Res> extends _$SetupCopyWithImpl<$Res>
           ? _value.command
           : command // ignore: cast_nullable_to_non_nullable
               as String,
+      aspectRatio: aspectRatio == freezed
+          ? _value.aspectRatio
+          : aspectRatio // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -1557,7 +1608,8 @@ class _$_Setup implements _Setup {
       {required this.id,
       this.name = 'name',
       final List<Display> displays = const [],
-      this.command = ''})
+      this.command = '',
+      this.aspectRatio = 8})
       : _displays = displays;
 
   factory _$_Setup.fromJson(Map<String, dynamic> json) =>
@@ -1579,10 +1631,13 @@ class _$_Setup implements _Setup {
   @override
   @JsonKey()
   final String command;
+  @override
+  @JsonKey()
+  final int aspectRatio;
 
   @override
   String toString() {
-    return 'Setup(id: $id, name: $name, displays: $displays, command: $command)';
+    return 'Setup(id: $id, name: $name, displays: $displays, command: $command, aspectRatio: $aspectRatio)';
   }
 
   @override
@@ -1593,7 +1648,9 @@ class _$_Setup implements _Setup {
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality().equals(other._displays, _displays) &&
-            const DeepCollectionEquality().equals(other.command, command));
+            const DeepCollectionEquality().equals(other.command, command) &&
+            const DeepCollectionEquality()
+                .equals(other.aspectRatio, aspectRatio));
   }
 
   @JsonKey(ignore: true)
@@ -1603,7 +1660,8 @@ class _$_Setup implements _Setup {
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(_displays),
-      const DeepCollectionEquality().hash(command));
+      const DeepCollectionEquality().hash(command),
+      const DeepCollectionEquality().hash(aspectRatio));
 
   @JsonKey(ignore: true)
   @override
@@ -1621,7 +1679,8 @@ abstract class _Setup implements Setup {
       {required final String id,
       final String name,
       final List<Display> displays,
-      final String command}) = _$_Setup;
+      final String command,
+      final int aspectRatio}) = _$_Setup;
 
   factory _Setup.fromJson(Map<String, dynamic> json) = _$_Setup.fromJson;
 
@@ -1633,6 +1692,8 @@ abstract class _Setup implements Setup {
   List<Display> get displays => throw _privateConstructorUsedError;
   @override
   String get command => throw _privateConstructorUsedError;
+  @override
+  int get aspectRatio => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_SetupCopyWith<_$_Setup> get copyWith =>
