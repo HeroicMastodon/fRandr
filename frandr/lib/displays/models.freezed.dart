@@ -1277,6 +1277,7 @@ mixin _$Configuration {
   Map<String, Setup> get setups => throw _privateConstructorUsedError;
   String? get selectedSetupId => throw _privateConstructorUsedError;
   String? get name => throw _privateConstructorUsedError;
+  String get configHash => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -1293,7 +1294,8 @@ abstract class $ConfigurationCopyWith<$Res> {
       {String setup,
       Map<String, Setup> setups,
       String? selectedSetupId,
-      String? name});
+      String? name,
+      String configHash});
 }
 
 /// @nodoc
@@ -1311,6 +1313,7 @@ class _$ConfigurationCopyWithImpl<$Res>
     Object? setups = freezed,
     Object? selectedSetupId = freezed,
     Object? name = freezed,
+    Object? configHash = freezed,
   }) {
     return _then(_value.copyWith(
       setup: setup == freezed
@@ -1329,6 +1332,10 @@ class _$ConfigurationCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
+      configHash: configHash == freezed
+          ? _value.configHash
+          : configHash // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -1344,7 +1351,8 @@ abstract class _$$_ConfigurationCopyWith<$Res>
       {String setup,
       Map<String, Setup> setups,
       String? selectedSetupId,
-      String? name});
+      String? name,
+      String configHash});
 }
 
 /// @nodoc
@@ -1364,6 +1372,7 @@ class __$$_ConfigurationCopyWithImpl<$Res>
     Object? setups = freezed,
     Object? selectedSetupId = freezed,
     Object? name = freezed,
+    Object? configHash = freezed,
   }) {
     return _then(_$_Configuration(
       setup: setup == freezed
@@ -1382,6 +1391,10 @@ class __$$_ConfigurationCopyWithImpl<$Res>
           ? _value.name
           : name // ignore: cast_nullable_to_non_nullable
               as String?,
+      configHash: configHash == freezed
+          ? _value.configHash
+          : configHash // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -1393,7 +1406,8 @@ class _$_Configuration implements _Configuration {
       {this.setup = '',
       final Map<String, Setup> setups = const {},
       this.selectedSetupId,
-      this.name})
+      this.name,
+      this.configHash = ''})
       : _setups = setups;
 
   factory _$_Configuration.fromJson(Map<String, dynamic> json) =>
@@ -1414,10 +1428,13 @@ class _$_Configuration implements _Configuration {
   final String? selectedSetupId;
   @override
   final String? name;
+  @override
+  @JsonKey()
+  final String configHash;
 
   @override
   String toString() {
-    return 'Configuration(setup: $setup, setups: $setups, selectedSetupId: $selectedSetupId, name: $name)';
+    return 'Configuration(setup: $setup, setups: $setups, selectedSetupId: $selectedSetupId, name: $name, configHash: $configHash)';
   }
 
   @override
@@ -1429,7 +1446,9 @@ class _$_Configuration implements _Configuration {
             const DeepCollectionEquality().equals(other._setups, _setups) &&
             const DeepCollectionEquality()
                 .equals(other.selectedSetupId, selectedSetupId) &&
-            const DeepCollectionEquality().equals(other.name, name));
+            const DeepCollectionEquality().equals(other.name, name) &&
+            const DeepCollectionEquality()
+                .equals(other.configHash, configHash));
   }
 
   @JsonKey(ignore: true)
@@ -1439,7 +1458,8 @@ class _$_Configuration implements _Configuration {
       const DeepCollectionEquality().hash(setup),
       const DeepCollectionEquality().hash(_setups),
       const DeepCollectionEquality().hash(selectedSetupId),
-      const DeepCollectionEquality().hash(name));
+      const DeepCollectionEquality().hash(name),
+      const DeepCollectionEquality().hash(configHash));
 
   @JsonKey(ignore: true)
   @override
@@ -1457,7 +1477,8 @@ abstract class _Configuration implements Configuration {
       {final String setup,
       final Map<String, Setup> setups,
       final String? selectedSetupId,
-      final String? name}) = _$_Configuration;
+      final String? name,
+      final String configHash}) = _$_Configuration;
 
   factory _Configuration.fromJson(Map<String, dynamic> json) =
       _$_Configuration.fromJson;
@@ -1470,6 +1491,8 @@ abstract class _Configuration implements Configuration {
   String? get selectedSetupId => throw _privateConstructorUsedError;
   @override
   String? get name => throw _privateConstructorUsedError;
+  @override
+  String get configHash => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_ConfigurationCopyWith<_$_Configuration> get copyWith =>

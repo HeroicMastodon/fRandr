@@ -110,6 +110,7 @@ _$_Configuration _$$_ConfigurationFromJson(Map<String, dynamic> json) =>
           const {},
       selectedSetupId: json['selectedSetupId'] as String?,
       name: json['name'] as String?,
+      configHash: json['configHash'] as String? ?? '',
     );
 
 Map<String, dynamic> _$$_ConfigurationToJson(_$_Configuration instance) =>
@@ -118,6 +119,7 @@ Map<String, dynamic> _$$_ConfigurationToJson(_$_Configuration instance) =>
       'setups': instance.setups,
       'selectedSetupId': instance.selectedSetupId,
       'name': instance.name,
+      'configHash': instance.configHash,
     };
 
 _$_Setup _$$_SetupFromJson(Map<String, dynamic> json) => _$_Setup(

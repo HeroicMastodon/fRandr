@@ -66,6 +66,7 @@ class Configuration with _$Configuration {
     @Default({}) Map<String, Setup> setups,
     String? selectedSetupId,
     String? name,
+    @Default('') String configHash,
   }) = _Configuration;
 
   factory Configuration.fromJson(Map<String, dynamic> json) =>
