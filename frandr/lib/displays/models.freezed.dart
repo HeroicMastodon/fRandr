@@ -1626,14 +1626,15 @@ class __$$_SetupCopyWithImpl<$Res> extends _$SetupCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$_Setup implements _Setup {
+class _$_Setup extends _Setup {
   const _$_Setup(
       {required this.id,
       this.name = 'name',
       final List<Display> displays = const [],
       this.command = '',
       this.aspectRatio = 8})
-      : _displays = displays;
+      : _displays = displays,
+        super._();
 
   factory _$_Setup.fromJson(Map<String, dynamic> json) =>
       _$$_SetupFromJson(json);
@@ -1697,13 +1698,14 @@ class _$_Setup implements _Setup {
   }
 }
 
-abstract class _Setup implements Setup {
+abstract class _Setup extends Setup {
   const factory _Setup(
       {required final String id,
       final String name,
       final List<Display> displays,
       final String command,
       final int aspectRatio}) = _$_Setup;
+  const _Setup._() : super._();
 
   factory _Setup.fromJson(Map<String, dynamic> json) = _$_Setup.fromJson;
 

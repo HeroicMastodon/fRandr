@@ -6,5 +6,6 @@ import 'actions.dart';
 ReduxState appReducer(ReduxState state, action) {
   return action is Actions ? ReduxState(
     configurations: configurationsReducer(state.configurations, action),
+    settings: state.settings,
   ) : state;
 }

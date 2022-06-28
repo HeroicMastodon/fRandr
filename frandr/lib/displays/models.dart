@@ -75,6 +75,8 @@ class Configuration with _$Configuration {
 
 @freezed
 class Setup with _$Setup {
+  const Setup._();
+
   const factory Setup({
     required String id,
     @Default('name') String name,
@@ -82,6 +84,16 @@ class Setup with _$Setup {
     @Default('') String command,
     @Default(8) int aspectRatio,
   }) = _Setup;
+
+  int get maxWidth => displays.fold(
+      0,
+          (previousValue, element) =>
+      previousValue + element.resolution.width);
+
+  int get maxHeight => displays.fold(
+      0,
+          (previousValue, element) =>
+      previousValue + element.resolution.height);
 
   factory Setup.fromJson(Map<String, dynamic> json) => _$SetupFromJson(json);
 }

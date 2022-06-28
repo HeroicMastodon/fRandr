@@ -10,7 +10,8 @@ class AppSettings with _$AppSettings {
   const factory AppSettings({
     @Default('') String configDirectory,
     @Default(25) int wiggleRoom,
-    @Default(null) String? currentSetupHash,
+    @Default(null) String? currentConfigurationHash,
+    @Default(8) int aspectRatio,
 }) = _AppSettings;
 
   factory AppSettings.fromJson(Map<String, dynamic> json) =>
@@ -24,13 +25,13 @@ class ReduxState with _$ReduxState {
   const factory ReduxState({
     // verticalScrollOffset
     // horizontalScrollOffset
-    @Default(AppSettings()) settings,
+    @Default(AppSettings()) AppSettings settings,
     @Default({}) Map<String, Configuration> configurations,
 }) = _ReduxState;
 
   Configuration? get configuration =>
-      settings.currentSetupHash != null ?
-      configurations[settings.currentSetupHash] : null;
+      settings.currentConfigurationHash != null ?
+      configurations[settings.currentConfigurationHash] : null;
 
   Setup? get setup =>
       configuration?.setups[configuration?.selectedSetupId];

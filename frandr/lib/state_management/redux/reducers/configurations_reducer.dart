@@ -1,43 +1,79 @@
 import 'package:frandr/displays/models.dart';
+import 'package:frandr/state_management/redux/helpers/calculate_coordinates.dart';
 import 'package:frandr/state_management/redux/reducers/actions.dart';
 import 'package:redux/redux.dart';
 
 final configurationsReducer =
-TypedReducer<Map<String, Configuration>, Actions>(_reducer);
+    TypedReducer<Map<String, Configuration>, Actions>(_reducer);
 
-Map<String, Configuration> _reducer(Map<String, Configuration> configurations,
-    Actions action) {
+Map<String, Configuration> _reducer(
+    Map<String, Configuration> configurations, Actions action) {
   return action.maybeWhen(
     orElse: () => configurations,
-    moveDisplay: (index,
-        selectedHash,
-        draggableDetails,
-        xPadding,
-        yPadding,) =>
-        configurations.map((key, config) {
-          // check for current setup and skip if not selected config
-          final setup = config.setups[config.selectedSetupId];
-          if (setup == null) return MapEntry(key, config);
+    initializeState: (settings, newConfigurations) {
+      return newConfigurations;
+    },
+    moveDisplay: (
+      setup,
+      configuration,
+      display,
+      draggableDetails,
+      xPadding,
+      yPadding,
+      aspectRatio,
+      wiggleRoom,
+    ) =>
+        configurations.map(
+      (key, config) {
+        if (config != configuration) return MapEntry(key, config);
 
-          // calculate new offset
-          final offset = DisplayOffset(0, 0);
+        final xOffset = (xPadding + draggableDetails.offset.dx) * aspectRatio;
+        final yOffset = (yPadding + draggableDetails.offset.dy) * aspectRatio;
 
-          final displays = [for (var i = 0; i < setup.displays.length; i++)
-            if (i != index) setup.displays[i]
-            else setup.displays[i].copyWith(offset: offset)
-          ];
+        // calculate new offset
+        final offset = calculateDisplayCoordinates(
+          xOffset,
+          yOffset,
+          display,
+          setup,
+          wiggleRoom,
+        );
 
-          return MapEntry(
-            key,
-            config.copyWith(
-              setups: config.setups.map(
-                    (key, value) =>
-                value.id == config.selectedSetupId
-                    ? MapEntry(key, value.copyWith(displays: displays))
-                    : MapEntry(key, value),
-              ),
+        final displays = setup.displays
+            .map(
+              (e) => e == display ? display.copyWith(offset: offset) : display,
+            )
+            .toList();
+
+        return MapEntry(
+          key,
+          config.copyWith(
+            setups: config.setups.map(
+              (key, value) => value.id == config.selectedSetupId
+                  ? MapEntry(key, value.copyWith(displays: displays))
+                  : MapEntry(key, value),
             ),
-          );
-        }),
+          ),
+        );
+      },
+    ),
+    setDisplayIsActive: (isActive, setup, configuration, display) {
+      return configurations;
+    },
+    setDisplayIsPrimary: (isPrimary, setup, configuration, display) {
+      return configurations;
+    },
+    setDisplayOffset: (offset, setup, configuration, display) {
+      return configurations;
+    },
+    setDisplayOrientation: (orientation, setup, configuration, display) {
+      return configurations;
+    },
+    setDisplayRefresh: (refreshRate, setup, configuration, display) {
+      return configurations;
+    },
+    setDisplayResolution: (resolution, setup, configuration, display) {
+      return configurations;
+    },
   );
 }

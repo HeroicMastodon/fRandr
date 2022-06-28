@@ -22,7 +22,8 @@ AppSettings _$AppSettingsFromJson(Map<String, dynamic> json) {
 mixin _$AppSettings {
   String get configDirectory => throw _privateConstructorUsedError;
   int get wiggleRoom => throw _privateConstructorUsedError;
-  String? get currentSetupHash => throw _privateConstructorUsedError;
+  String? get currentConfigurationHash => throw _privateConstructorUsedError;
+  int get aspectRatio => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,11 @@ abstract class $AppSettingsCopyWith<$Res> {
   factory $AppSettingsCopyWith(
           AppSettings value, $Res Function(AppSettings) then) =
       _$AppSettingsCopyWithImpl<$Res>;
-  $Res call({String configDirectory, int wiggleRoom, String? currentSetupHash});
+  $Res call(
+      {String configDirectory,
+      int wiggleRoom,
+      String? currentConfigurationHash,
+      int aspectRatio});
 }
 
 /// @nodoc
@@ -50,7 +55,8 @@ class _$AppSettingsCopyWithImpl<$Res> implements $AppSettingsCopyWith<$Res> {
   $Res call({
     Object? configDirectory = freezed,
     Object? wiggleRoom = freezed,
-    Object? currentSetupHash = freezed,
+    Object? currentConfigurationHash = freezed,
+    Object? aspectRatio = freezed,
   }) {
     return _then(_value.copyWith(
       configDirectory: configDirectory == freezed
@@ -61,10 +67,14 @@ class _$AppSettingsCopyWithImpl<$Res> implements $AppSettingsCopyWith<$Res> {
           ? _value.wiggleRoom
           : wiggleRoom // ignore: cast_nullable_to_non_nullable
               as int,
-      currentSetupHash: currentSetupHash == freezed
-          ? _value.currentSetupHash
-          : currentSetupHash // ignore: cast_nullable_to_non_nullable
+      currentConfigurationHash: currentConfigurationHash == freezed
+          ? _value.currentConfigurationHash
+          : currentConfigurationHash // ignore: cast_nullable_to_non_nullable
               as String?,
+      aspectRatio: aspectRatio == freezed
+          ? _value.aspectRatio
+          : aspectRatio // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -76,7 +86,11 @@ abstract class _$$_AppSettingsCopyWith<$Res>
           _$_AppSettings value, $Res Function(_$_AppSettings) then) =
       __$$_AppSettingsCopyWithImpl<$Res>;
   @override
-  $Res call({String configDirectory, int wiggleRoom, String? currentSetupHash});
+  $Res call(
+      {String configDirectory,
+      int wiggleRoom,
+      String? currentConfigurationHash,
+      int aspectRatio});
 }
 
 /// @nodoc
@@ -93,7 +107,8 @@ class __$$_AppSettingsCopyWithImpl<$Res> extends _$AppSettingsCopyWithImpl<$Res>
   $Res call({
     Object? configDirectory = freezed,
     Object? wiggleRoom = freezed,
-    Object? currentSetupHash = freezed,
+    Object? currentConfigurationHash = freezed,
+    Object? aspectRatio = freezed,
   }) {
     return _then(_$_AppSettings(
       configDirectory: configDirectory == freezed
@@ -104,10 +119,14 @@ class __$$_AppSettingsCopyWithImpl<$Res> extends _$AppSettingsCopyWithImpl<$Res>
           ? _value.wiggleRoom
           : wiggleRoom // ignore: cast_nullable_to_non_nullable
               as int,
-      currentSetupHash: currentSetupHash == freezed
-          ? _value.currentSetupHash
-          : currentSetupHash // ignore: cast_nullable_to_non_nullable
+      currentConfigurationHash: currentConfigurationHash == freezed
+          ? _value.currentConfigurationHash
+          : currentConfigurationHash // ignore: cast_nullable_to_non_nullable
               as String?,
+      aspectRatio: aspectRatio == freezed
+          ? _value.aspectRatio
+          : aspectRatio // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -118,7 +137,8 @@ class _$_AppSettings implements _AppSettings {
   const _$_AppSettings(
       {this.configDirectory = '',
       this.wiggleRoom = 25,
-      this.currentSetupHash = null});
+      this.currentConfigurationHash = null,
+      this.aspectRatio = 8});
 
   factory _$_AppSettings.fromJson(Map<String, dynamic> json) =>
       _$$_AppSettingsFromJson(json);
@@ -131,11 +151,14 @@ class _$_AppSettings implements _AppSettings {
   final int wiggleRoom;
   @override
   @JsonKey()
-  final String? currentSetupHash;
+  final String? currentConfigurationHash;
+  @override
+  @JsonKey()
+  final int aspectRatio;
 
   @override
   String toString() {
-    return 'AppSettings(configDirectory: $configDirectory, wiggleRoom: $wiggleRoom, currentSetupHash: $currentSetupHash)';
+    return 'AppSettings(configDirectory: $configDirectory, wiggleRoom: $wiggleRoom, currentConfigurationHash: $currentConfigurationHash, aspectRatio: $aspectRatio)';
   }
 
   @override
@@ -147,8 +170,10 @@ class _$_AppSettings implements _AppSettings {
                 .equals(other.configDirectory, configDirectory) &&
             const DeepCollectionEquality()
                 .equals(other.wiggleRoom, wiggleRoom) &&
+            const DeepCollectionEquality().equals(
+                other.currentConfigurationHash, currentConfigurationHash) &&
             const DeepCollectionEquality()
-                .equals(other.currentSetupHash, currentSetupHash));
+                .equals(other.aspectRatio, aspectRatio));
   }
 
   @JsonKey(ignore: true)
@@ -157,7 +182,8 @@ class _$_AppSettings implements _AppSettings {
       runtimeType,
       const DeepCollectionEquality().hash(configDirectory),
       const DeepCollectionEquality().hash(wiggleRoom),
-      const DeepCollectionEquality().hash(currentSetupHash));
+      const DeepCollectionEquality().hash(currentConfigurationHash),
+      const DeepCollectionEquality().hash(aspectRatio));
 
   @JsonKey(ignore: true)
   @override
@@ -174,7 +200,8 @@ abstract class _AppSettings implements AppSettings {
   const factory _AppSettings(
       {final String configDirectory,
       final int wiggleRoom,
-      final String? currentSetupHash}) = _$_AppSettings;
+      final String? currentConfigurationHash,
+      final int aspectRatio}) = _$_AppSettings;
 
   factory _AppSettings.fromJson(Map<String, dynamic> json) =
       _$_AppSettings.fromJson;
@@ -184,7 +211,9 @@ abstract class _AppSettings implements AppSettings {
   @override
   int get wiggleRoom => throw _privateConstructorUsedError;
   @override
-  String? get currentSetupHash => throw _privateConstructorUsedError;
+  String? get currentConfigurationHash => throw _privateConstructorUsedError;
+  @override
+  int get aspectRatio => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$$_AppSettingsCopyWith<_$_AppSettings> get copyWith =>
@@ -199,7 +228,7 @@ ReduxState _$ReduxStateFromJson(Map<String, dynamic> json) {
 mixin _$ReduxState {
 // verticalScrollOffset
 // horizontalScrollOffset
-  dynamic get settings => throw _privateConstructorUsedError;
+  AppSettings get settings => throw _privateConstructorUsedError;
   Map<String, Configuration> get configurations =>
       throw _privateConstructorUsedError;
 
@@ -214,7 +243,9 @@ abstract class $ReduxStateCopyWith<$Res> {
   factory $ReduxStateCopyWith(
           ReduxState value, $Res Function(ReduxState) then) =
       _$ReduxStateCopyWithImpl<$Res>;
-  $Res call({dynamic settings, Map<String, Configuration> configurations});
+  $Res call({AppSettings settings, Map<String, Configuration> configurations});
+
+  $AppSettingsCopyWith<$Res> get settings;
 }
 
 /// @nodoc
@@ -234,12 +265,19 @@ class _$ReduxStateCopyWithImpl<$Res> implements $ReduxStateCopyWith<$Res> {
       settings: settings == freezed
           ? _value.settings
           : settings // ignore: cast_nullable_to_non_nullable
-              as dynamic,
+              as AppSettings,
       configurations: configurations == freezed
           ? _value.configurations
           : configurations // ignore: cast_nullable_to_non_nullable
               as Map<String, Configuration>,
     ));
+  }
+
+  @override
+  $AppSettingsCopyWith<$Res> get settings {
+    return $AppSettingsCopyWith<$Res>(_value.settings, (value) {
+      return _then(_value.copyWith(settings: value));
+    });
   }
 }
 
@@ -250,7 +288,10 @@ abstract class _$$_ReduxStateCopyWith<$Res>
           _$_ReduxState value, $Res Function(_$_ReduxState) then) =
       __$$_ReduxStateCopyWithImpl<$Res>;
   @override
-  $Res call({dynamic settings, Map<String, Configuration> configurations});
+  $Res call({AppSettings settings, Map<String, Configuration> configurations});
+
+  @override
+  $AppSettingsCopyWith<$Res> get settings;
 }
 
 /// @nodoc
@@ -269,7 +310,10 @@ class __$$_ReduxStateCopyWithImpl<$Res> extends _$ReduxStateCopyWithImpl<$Res>
     Object? configurations = freezed,
   }) {
     return _then(_$_ReduxState(
-      settings: settings == freezed ? _value.settings : settings,
+      settings: settings == freezed
+          ? _value.settings
+          : settings // ignore: cast_nullable_to_non_nullable
+              as AppSettings,
       configurations: configurations == freezed
           ? _value._configurations
           : configurations // ignore: cast_nullable_to_non_nullable
@@ -294,7 +338,7 @@ class _$_ReduxState extends _ReduxState {
 // horizontalScrollOffset
   @override
   @JsonKey()
-  final dynamic settings;
+  final AppSettings settings;
   final Map<String, Configuration> _configurations;
   @override
   @JsonKey()
@@ -338,7 +382,7 @@ class _$_ReduxState extends _ReduxState {
 
 abstract class _ReduxState extends ReduxState {
   const factory _ReduxState(
-      {final dynamic settings,
+      {final AppSettings settings,
       final Map<String, Configuration> configurations}) = _$_ReduxState;
   const _ReduxState._() : super._();
 
@@ -347,7 +391,7 @@ abstract class _ReduxState extends ReduxState {
 
   @override // verticalScrollOffset
 // horizontalScrollOffset
-  dynamic get settings => throw _privateConstructorUsedError;
+  AppSettings get settings => throw _privateConstructorUsedError;
   @override
   Map<String, Configuration> get configurations =>
       throw _privateConstructorUsedError;
